@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.cache/
+tmp/
+
+# Databases
+*.sqlite
+*.sqlite3
+db/*.sqlite
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
