@@ -114,7 +114,7 @@ function ProjectsSection() {
         <SectionRule number="02" label="SELECTED PROJECTS" heading />
         <div mix={projectsGridStyle}>
           {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} variant="home" />
+            <ProjectCard key={project.id} project={project} variant="home" headingLevel={3} />
           ))}
         </div>
         <a href={routes.projects.index.href()} mix={seeAllLinkStyle}>
@@ -137,7 +137,7 @@ function WritingSection() {
         <SectionRule number="03" label="RECENT WRITING" heading />
         <div mix={writingListStyle}>
           {posts.map((post, index) => (
-            <PostCard key={post.slug} post={post} index={index} variant="row" />
+            <PostCard key={post.slug} post={post} index={index} variant="row" headingLevel={3} />
           ))}
         </div>
         <a href={routes.writing.index.href()} mix={seeAllLinkStyle}>

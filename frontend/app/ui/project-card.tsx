@@ -40,10 +40,24 @@ const SIZES = {
   },
 } as const
 
-export function ProjectCard(handle: Handle<{ project: Project; variant?: ProjectCardVariant }>) {
+export interface ProjectCardProps {
+  project: Project
+  variant?: ProjectCardVariant
+  /**
+   * Render the project name as a real heading at this depth instead of a
+   * decorative `<span>`. Omit to keep the `<span>` -- e.g. on the home
+   * page's ELSEWHERE cards, which aren't ProjectCard at all, or any other
+   * caller that hasn't been given a slot in the page's heading outline.
+   */
+  headingLevel?: 2 | 3
+}
+
+export function ProjectCard(handle: Handle<ProjectCardProps>) {
   return () => {
-    let { project, variant = 'index' } = handle.props
+    let { project, variant = 'index', headingLevel } = handle.props
     let size = SIZES[variant]
+    let NameTag: 'h2' | 'h3' | 'span' =
+      headingLevel === 2 ? 'h2' : headingLevel === 3 ? 'h3' : 'span'
 
     return (
       <a
@@ -83,9 +97,10 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
               gap: '12px',
             })}
           >
-            <span
+            <NameTag
               class="card-name"
               mix={css({
+                margin: 0,
                 fontSize: size.name,
                 fontWeight: 600,
                 letterSpacing: size.nameLetterSpacing,
@@ -94,7 +109,7 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
               })}
             >
               {project.name}
-            </span>
+            </NameTag>
             <span
               class="card-go"
               aria-hidden="true"

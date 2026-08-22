@@ -266,4 +266,61 @@ describe('PostCard', () => {
       assert.match(html, /\[Title — up to about 60 characters\]/)
     }
   })
+
+  it('by default (no headingLevel) renders the title as a plain <span>, not a heading', async () => {
+    let post = stub()
+    let html = await renderToString(<PostCard post={post} index={0} variant="row" />)
+    assert.equal(/<h[1-6][^>]*class="card-title/.test(html), false)
+    assert.match(html, new RegExp(`<span class="card-title[^"]*">${post.title}</span>`))
+  })
+
+  it('headingLevel={2} renders the title as an <h2>; headingLevel={3} as an <h3> -- never a <span>', async () => {
+    let post = stub()
+    let h2Html = await renderToString(<PostCard post={post} index={0} variant="row" headingLevel={2} />)
+    let h3Html = await renderToString(<PostCard post={post} index={0} variant="row" headingLevel={3} />)
+    assert.match(h2Html, new RegExp(`<h2 class="card-title[^"]*">${post.title}</h2>`))
+    assert.match(h3Html, new RegExp(`<h3 class="card-title[^"]*">${post.title}</h3>`))
+    assert.equal(h2Html.includes('<span class="card-title'), false)
+    assert.equal(h3Html.includes('<span class="card-title'), false)
+  })
+
+  it('the title keeps the same class -- and so the same emitted CSS rule, including its explicit margin: 0 -- whether rendered as a <span>, <h2>, or <h3>: switching tags must not move a pixel', async () => {
+    let post = stub()
+    let spanHtml = await renderToString(<PostCard post={post} index={0} variant="row" />)
+    let h2Html = await renderToString(<PostCard post={post} index={0} variant="row" headingLevel={2} />)
+    let h3Html = await renderToString(<PostCard post={post} index={0} variant="row" headingLevel={3} />)
+
+    let spanClass = /<span class="card-title ([^"]+)"/.exec(spanHtml)?.[1]
+    let h2Class = /<h2 class="card-title ([^"]+)"/.exec(h2Html)?.[1]
+    let h3Class = /<h3 class="card-title ([^"]+)"/.exec(h3Html)?.[1]
+    assert.ok(spanClass)
+    assert.ok(h2Class)
+    assert.ok(h3Class)
+    assert.equal(spanClass, h2Class)
+    assert.equal(spanClass, h3Class)
+
+    function ruleFor(className: string, html: string): string | undefined {
+      return new RegExp(`\\.${className}\\s*\\{[^}]*\\}`).exec(allStyles(html))?.[0]
+    }
+    let rule = ruleFor(spanClass!, spanHtml)
+    assert.ok(rule)
+    assert.match(rule!, /margin:\s*0/)
+    assert.equal(rule, ruleFor(h2Class!, h2Html))
+    assert.equal(rule, ruleFor(h3Class!, h3Html))
+  })
+
+  it('the hover-driven title colour still applies when the title is a heading, not just a <span>', async () => {
+    // Regression guard for the exact trap this file already documents above:
+    // the parent link sets --card-title-color on its own &:hover (self-
+    // targeting, not a descendant selector), and the title element consumes
+    // it via var(...) with a fallback -- none of that depends on which tag
+    // renders the title, so it must keep working when the title becomes an
+    // <h2>/<h3>.
+    let post = stub()
+    let html = await renderToString(<PostCard post={post} index={0} variant="featured" headingLevel={2} />)
+    let sheet = allStyles(html)
+    assert.match(sheet, /&:hover \{[\s\S]*?--card-title-color:\s*var\(--accent\)[\s\S]*?\}/)
+    assert.match(html, /<h2 class="card-title[^"]*">/)
+    assert.match(sheet, /color:\s*var\(--card-title-color, var\(--ink\)\)/)
+  })
 })

@@ -75,7 +75,7 @@ export function ProjectsPage(handle: Handle<ProjectsPageProps>) {
             {projects.length > 0 ? (
               <div mix={gridStyle}>
                 {projects.map((project) => (
-                  <ProjectCard key={project.id} project={project} variant="index" />
+                  <ProjectCard key={project.id} project={project} variant="index" headingLevel={2} />
                 ))}
               </div>
             ) : (

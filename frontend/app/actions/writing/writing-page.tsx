@@ -40,7 +40,7 @@ export function WritingPage(handle: Handle<WritingPageProps>) {
         {featured ? (
           <section aria-label="Latest post" mix={featuredSectionStyle}>
             <div mix={featuredInnerStyle}>
-              <PostCard post={featured} index={0} variant="featured" />
+              <PostCard post={featured} index={0} variant="featured" headingLevel={2} />
             </div>
           </section>
         ) : null}
@@ -52,7 +52,7 @@ export function WritingPage(handle: Handle<WritingPageProps>) {
 
               <div mix={listStyle}>
                 {rest.map((post, i) => (
-                  <PostCard key={post.slug} post={post} index={i + 1} variant="row" />
+                  <PostCard key={post.slug} post={post} index={i + 1} variant="row" headingLevel={3} />
                 ))}
               </div>
             </div>

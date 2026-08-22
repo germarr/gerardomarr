@@ -132,4 +132,67 @@ describe('ProjectCard', () => {
     assert.match(html, /flex:\s*1 1 auto/)
     assert.match(html, /margin-top:\s*auto/)
   })
+
+  it('by default (no headingLevel) renders the name as a plain <span>, not a heading', async () => {
+    let project = PROJECTS[0]!
+    let html = await renderToString(<ProjectCard project={project} />)
+    assert.equal(/<h[1-6][^>]*class="card-name/.test(html), false)
+    assert.match(html, new RegExp(`<span class="card-name[^"]*">${project.name}</span>`))
+  })
+
+  it('headingLevel={2} renders the name as an <h2>; headingLevel={3} as an <h3> -- never a <span>', async () => {
+    let project = PROJECTS[0]!
+    let h2Html = await renderToString(<ProjectCard project={project} headingLevel={2} />)
+    let h3Html = await renderToString(<ProjectCard project={project} headingLevel={3} />)
+    assert.match(h2Html, new RegExp(`<h2 class="card-name[^"]*">${project.name}</h2>`))
+    assert.match(h3Html, new RegExp(`<h3 class="card-name[^"]*">${project.name}</h3>`))
+    assert.equal(h2Html.includes('<span class="card-name'), false)
+    assert.equal(h3Html.includes('<span class="card-name'), false)
+  })
+
+  it('the name keeps the same class -- and so the same emitted CSS rule, including its explicit margin: 0 -- whether rendered as a <span>, <h2>, or <h3>: switching tags must not move a pixel', async () => {
+    let project = PROJECTS[0]!
+    let spanHtml = await renderToString(<ProjectCard project={project} />)
+    let h2Html = await renderToString(<ProjectCard project={project} headingLevel={2} />)
+    let h3Html = await renderToString(<ProjectCard project={project} headingLevel={3} />)
+
+    let spanClass = /<span class="card-name ([^"]+)"/.exec(spanHtml)?.[1]
+    let h2Class = /<h2 class="card-name ([^"]+)"/.exec(h2Html)?.[1]
+    let h3Class = /<h3 class="card-name ([^"]+)"/.exec(h3Html)?.[1]
+    assert.ok(spanClass)
+    assert.ok(h2Class)
+    assert.ok(h3Class)
+    assert.equal(spanClass, h2Class)
+    assert.equal(spanClass, h3Class)
+
+    function ruleFor(className: string, html: string): string | undefined {
+      return new RegExp(`\\.${className}\\s*\\{[^}]*\\}`).exec(allStyles(html))?.[0]
+    }
+    let rule = ruleFor(spanClass!, spanHtml)
+    assert.ok(rule)
+    assert.match(rule!, /margin:\s*0/)
+    assert.equal(rule, ruleFor(h2Class!, h2Html))
+    assert.equal(rule, ruleFor(h3Class!, h3Html))
+  })
+
+  it('the hover-driven name colour still applies when the name is a heading, not just a <span>', async () => {
+    // Regression guard for the exact trap this file already documents above:
+    // the parent <a> sets --card-name-color on its own &:hover (self-
+    // targeting, not a descendant selector), and the name element consumes
+    // it via var(...) with a fallback -- none of that depends on which tag
+    // renders the name, so it must keep working when the name becomes an
+    // <h2>/<h3>.
+    let project = PROJECTS[0]!
+    let html = await renderToString(<ProjectCard project={project} headingLevel={2} />)
+    let anchorTag = /<a\s[^>]*>/.exec(html)
+    assert.ok(anchorTag)
+    let cls = /class="([^"]+)"/.exec(anchorTag![0]!)![1]!.split(' ')[0]!
+    let sheet = allStyles(html)
+    assert.match(
+      sheet,
+      new RegExp(`\\.${cls}\\s*\\{[\\s\\S]*&:hover \\{[\\s\\S]*?--card-name-color:\\s*var\\(--accent\\)`),
+    )
+    assert.match(html, /<h2 class="card-name[^"]*">/)
+    assert.match(sheet, /color:\s*var\(--card-name-color, var\(--ink\)\)/)
+  })
 })

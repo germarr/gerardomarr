@@ -116,14 +116,26 @@ const SIZES = {
   },
 } as const
 
-export function PostCard(
-  handle: Handle<{ post: Post; index: number; variant?: PostCardVariant }>,
-) {
+export interface PostCardProps {
+  post: Post
+  index: number
+  variant?: PostCardVariant
+  /**
+   * Render the post title as a real heading at this depth instead of a
+   * decorative `<span>`. Omit to keep the `<span>` -- e.g. any caller that
+   * hasn't been given a slot in the page's heading outline.
+   */
+  headingLevel?: 2 | 3
+}
+
+export function PostCard(handle: Handle<PostCardProps>) {
   return () => {
-    let { post, index, variant = 'row' } = handle.props
+    let { post, index, variant = 'row', headingLevel } = handle.props
     let size = SIZES[variant]
     let ordinal = String(index + 1).padStart(2, '0')
     let hasImage = post.image.length > 0
+    let TitleTag: 'h2' | 'h3' | 'span' =
+      headingLevel === 2 ? 'h2' : headingLevel === 3 ? 'h3' : 'span'
 
     let plate = (
       <div
@@ -203,9 +215,10 @@ export function PostCard(
     )
 
     let title = (
-      <span
+      <TitleTag
         class="card-title"
         mix={css({
+          margin: 0,
           fontSize: size.titleSize,
           fontWeight: 600,
           lineHeight: size.titleLine,
@@ -216,7 +229,7 @@ export function PostCard(
         })}
       >
         {post.title}
-      </span>
+      </TitleTag>
     )
 
     let hook = (
