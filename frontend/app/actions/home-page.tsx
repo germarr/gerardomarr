@@ -5,12 +5,11 @@ import { allPosts } from '../data/posts.ts'
 import { featuredProjects } from '../data/projects.ts'
 import { routes } from '../routes.ts'
 import { ArrowOut, ArrowRight, GitHub, Instagram, LinkedIn } from '../ui/icons.tsx'
+import { centeredColumnBase, promptLineStyle } from '../ui/page-layout.ts'
 import { PostCard } from '../ui/post-card.tsx'
 import { ProjectCard } from '../ui/project-card.tsx'
 import { SectionRule } from '../ui/section-rule.tsx'
 import { Shell } from '../ui/shell.tsx'
-
-const CONTENT_MAX = '1080px'
 
 /**
  * Page chrome, not ABOUT copy: the GitHub/LinkedIn/Instagram icon plus the
@@ -86,7 +85,7 @@ function AboutSection() {
   return () => (
     <section aria-label="About" mix={aboutSectionStyle}>
       <div mix={aboutInnerStyle}>
-        <SectionRule number="01" label="ABOUT" />
+        <SectionRule number="01" label="ABOUT" heading />
         <div mix={aboutGridStyle}>
           <p mix={aboutLeadStyle}>{ABOUT.lead}</p>
           <div mix={aboutBodyColStyle}>
@@ -112,7 +111,7 @@ function ProjectsSection() {
   return () => (
     <section aria-label="Selected projects" mix={projectsSectionStyle}>
       <div mix={projectsInnerStyle}>
-        <SectionRule number="02" label="SELECTED PROJECTS" />
+        <SectionRule number="02" label="SELECTED PROJECTS" heading />
         <div mix={projectsGridStyle}>
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="home" />
@@ -135,7 +134,7 @@ function WritingSection() {
   return () => (
     <section aria-label="Recent writing" mix={writingSectionStyle}>
       <div mix={writingInnerStyle}>
-        <SectionRule number="03" label="RECENT WRITING" />
+        <SectionRule number="03" label="RECENT WRITING" heading />
         <div mix={writingListStyle}>
           {posts.map((post, index) => (
             <PostCard key={post.slug} post={post} index={index} variant="row" />
@@ -156,7 +155,7 @@ function ElsewhereSection() {
   return () => (
     <section aria-label="Elsewhere" mix={elsewhereSectionStyle}>
       <div mix={elsewhereInnerStyle}>
-        <SectionRule number="04" label="ELSEWHERE" />
+        <SectionRule number="04" label="ELSEWHERE" heading />
         <div mix={elsewhereGridStyle}>
           {SOCIALS.map((social) => (
             <a key={social.name} href={social.href} mix={socialCardStyle}>
@@ -216,19 +215,7 @@ const heroSectionStyle = css({
   '@media (max-width: 720px)': { padding: '44px 20px 40px' },
 })
 
-const heroInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '34px',
-})
-
-const promptLineStyle = css({
-  color: 'var(--ink-3)',
-  fontSize: '12px',
-  letterSpacing: '0.16em',
-})
+const heroInnerStyle = css({ ...centeredColumnBase, gap: '34px' })
 
 const heroNameStyle = css({
   margin: 0,
@@ -287,13 +274,7 @@ const socialLinkStyle = css({
 
 const aboutSectionStyle = css({ padding: '24px 48px 88px' })
 
-const aboutInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '36px',
-})
+const aboutInnerStyle = css({ ...centeredColumnBase, gap: '36px' })
 
 const aboutGridStyle = css({
   display: 'grid',
@@ -351,13 +332,7 @@ const kickerTextStyle = css({
 
 const projectsSectionStyle = css({ padding: '0 48px 88px' })
 
-const projectsInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '32px',
-})
+const projectsInnerStyle = css({ ...centeredColumnBase, gap: '32px' })
 
 const projectsGridStyle = css({
   display: 'grid',
@@ -370,13 +345,7 @@ const projectsGridStyle = css({
 
 const writingSectionStyle = css({ padding: '0 48px 88px' })
 
-const writingInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '28px',
-})
+const writingInnerStyle = css({ ...centeredColumnBase, gap: '28px' })
 
 /**
  * `PostCard`'s `row` variant only draws its own top rule, so the list that
@@ -394,13 +363,7 @@ const writingListStyle = css({
 
 const elsewhereSectionStyle = css({ padding: '0 48px 64px' })
 
-const elsewhereInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '32px',
-})
+const elsewhereInnerStyle = css({ ...centeredColumnBase, gap: '32px' })
 
 const elsewhereGridStyle = css({
   display: 'grid',

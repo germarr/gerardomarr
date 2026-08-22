@@ -4,11 +4,10 @@ import { css } from 'remix/ui'
 import type { Project } from '../../data/projects.ts'
 import { slugifyTag, stackTags } from '../../data/projects.ts'
 import { routes } from '../../routes.ts'
+import { centeredColumnBase, promptLineStyle } from '../../ui/page-layout.ts'
 import { ProjectCard } from '../../ui/project-card.tsx'
 import { SectionRule } from '../../ui/section-rule.tsx'
 import { Shell } from '../../ui/shell.tsx'
-
-const CONTENT_MAX = '1080px'
 
 export interface ProjectsPageProps {
   projects: Project[]
@@ -47,7 +46,14 @@ export function ProjectsPage(handle: Handle<ProjectsPageProps>) {
           <div mix={listInnerStyle}>
             <SectionRule label="FILTER BY STACK" trailing={countLabel} />
 
-            <div mix={chipRowStyle}>
+            {/*
+              "FILTER BY STACK" labels this chip row, not a content section --
+              it's a group of filter controls, not prose to navigate to by
+              heading. So the row gets its own accessible name as a <nav>
+              landmark (each chip really is a link to a distinct filtered
+              URL) rather than promoting the label to an <h2>.
+            */}
+            <nav aria-label="Filter by stack" mix={chipRowStyle}>
               <FilterChip
                 label="all"
                 href={routes.projects.index.href()}
@@ -64,7 +70,7 @@ export function ProjectsPage(handle: Handle<ProjectsPageProps>) {
                   />
                 )
               })}
-            </div>
+            </nav>
 
             {projects.length > 0 ? (
               <div mix={gridStyle}>
@@ -87,7 +93,11 @@ function FilterChip(handle: Handle<{ label: string; href: string; active: boolea
     let { label, href, active } = handle.props
 
     return (
-      <a href={href} mix={active ? chipActiveStyle : chipInactiveStyle}>
+      <a
+        href={href}
+        aria-current={active ? 'page' : undefined}
+        mix={active ? chipActiveStyle : chipInactiveStyle}
+      >
         {label}
       </a>
     )
@@ -99,19 +109,7 @@ const headerSectionStyle = css({
   '@media (max-width: 720px)': { padding: '44px 20px 28px' },
 })
 
-const headerInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '26px',
-})
-
-const promptLineStyle = css({
-  color: 'var(--ink-3)',
-  fontSize: '12px',
-  letterSpacing: '0.16em',
-})
+const headerInnerStyle = css({ ...centeredColumnBase, gap: '26px' })
 
 const titleStyle = css({
   margin: 0,
@@ -137,13 +135,7 @@ const listSectionStyle = css({
   '@media (max-width: 720px)': { padding: '0 20px 56px' },
 })
 
-const listInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '26px',
-})
+const listInnerStyle = css({ ...centeredColumnBase, gap: '26px' })
 
 const chipRowStyle = css({
   display: 'flex',

@@ -2,11 +2,10 @@ import type { Handle } from 'remix/ui'
 import { css } from 'remix/ui'
 
 import type { Post } from '../../data/posts.ts'
+import { centeredColumnBase, CONTENT_MAX, promptLineStyle } from '../../ui/page-layout.ts'
 import { PostCard } from '../../ui/post-card.tsx'
 import { SectionRule } from '../../ui/section-rule.tsx'
 import { Shell } from '../../ui/shell.tsx'
-
-const CONTENT_MAX = '1080px'
 
 export interface WritingPageProps {
   posts: Post[]
@@ -49,7 +48,7 @@ export function WritingPage(handle: Handle<WritingPageProps>) {
         {rest.length > 0 ? (
           <section aria-label="Earlier posts" mix={archiveSectionStyle}>
             <div mix={archiveInnerStyle}>
-              <SectionRule label="EARLIER" trailing={`${pad2(rest.length)} POSTS`} />
+              <SectionRule label="EARLIER" trailing={`${pad2(rest.length)} POSTS`} heading />
 
               <div mix={listStyle}>
                 {rest.map((post, i) => (
@@ -75,19 +74,7 @@ const headerSectionStyle = css({
   '@media (max-width: 720px)': { padding: '44px 20px 28px' },
 })
 
-const headerInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '26px',
-})
-
-const promptLineStyle = css({
-  color: 'var(--ink-3)',
-  fontSize: '12px',
-  letterSpacing: '0.16em',
-})
+const headerInnerStyle = css({ ...centeredColumnBase, gap: '26px' })
 
 const titleStyle = css({
   margin: 0,
@@ -123,13 +110,7 @@ const archiveSectionStyle = css({
   '@media (max-width: 720px)': { padding: '0 20px 56px' },
 })
 
-const archiveInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '22px',
-})
+const archiveInnerStyle = css({ ...centeredColumnBase, gap: '22px' })
 
 const listStyle = css({
   display: 'flex',

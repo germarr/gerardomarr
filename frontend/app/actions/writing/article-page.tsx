@@ -5,10 +5,9 @@ import type { Post } from '../../data/posts.ts'
 import { routes } from '../../routes.ts'
 import { ArrowBack } from '../../ui/icons.tsx'
 import { ArticleBody } from '../../ui/article-body.tsx'
+import { centeredColumnBase, CONTENT_MAX } from '../../ui/page-layout.ts'
 import { FONT_SANS } from '../../ui/theme.ts'
 import { Shell } from '../../ui/shell.tsx'
-
-const CONTENT_MAX = '1080px'
 
 export interface ArticlePageProps {
   post: Post
@@ -125,13 +124,7 @@ const titleSectionStyle = css({
   '@media (max-width: 720px)': { padding: '44px 20px 28px' },
 })
 
-const titleInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '24px',
-})
+const titleInnerStyle = css({ ...centeredColumnBase, gap: '24px' })
 
 const metaStyle = css({
   display: 'flex',
@@ -226,13 +219,7 @@ const footerSectionStyle = css({
   '@media (max-width: 720px)': { padding: '0 20px 40px' },
 })
 
-const footerInnerStyle = css({
-  maxWidth: CONTENT_MAX,
-  margin: '0 auto',
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '22px',
-})
+const footerInnerStyle = css({ ...centeredColumnBase, gap: '22px' })
 
 const footerRuleStyle = css({
   height: '1px',

@@ -6,17 +6,34 @@ export interface SectionRuleProps {
   label: string
   /** Optional right-hand text, e.g. "04 / 04". */
   trailing?: string
+  /**
+   * Render the label as a real `<h2>` instead of a decorative `<span>`.
+   * Use this for rules that mark a genuine page section (e.g. "01 ABOUT").
+   * Leave it off for rules that label a control group rather than a
+   * content section (e.g. "FILTER BY STACK") -- label that some other,
+   * more accurate way instead. `labelStyle` carries the same font-size,
+   * weight, letter-spacing, colour and margin either way, so switching
+   * tags does not move anything visually.
+   */
+  heading?: boolean
 }
 
 export function SectionRule(handle: Handle<SectionRuleProps>) {
   return () => {
-    let { number, label, trailing } = handle.props
+    let { number, label, trailing, heading } = handle.props
+    let LabelTag: 'h2' | 'span' = heading ? 'h2' : 'span'
 
     return (
       <div mix={rowStyle}>
-        {number ? <span mix={numberStyle}>{number}</span> : <span mix={labelStyle}>{label}</span>}
+        {number ? (
+          <span aria-hidden="true" mix={numberStyle}>
+            {number}
+          </span>
+        ) : (
+          <LabelTag mix={labelStyle}>{label}</LabelTag>
+        )}
         <span mix={hairlineStyle} />
-        {number ? <span mix={labelStyle}>{label}</span> : null}
+        {number ? <LabelTag mix={labelStyle}>{label}</LabelTag> : null}
         {trailing ? <span mix={trailingStyle}>{trailing}</span> : null}
       </div>
     )
@@ -43,6 +60,7 @@ const hairlineStyle = css({
 })
 
 const labelStyle = css({
+  margin: 0,
   color: 'var(--ink-3)',
   fontSize: '11.5px',
   fontWeight: 600,
