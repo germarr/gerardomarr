@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    [data-theme] {
+      --paper: oklch(0.973 0.006 85);
+      --paper-2: oklch(0.958 0.008 82);
+      --ink: oklch(0.245 0.012 62);
+      --ink-2: oklch(0.455 0.010 68);
+      --ink-3: oklch(0.536 0.008 72);
+      --rule: oklch(0.885 0.008 80);
+      --rule-2: oklch(0.815 0.010 78);
+      --accent: oklch(0.570 0.155 42);
+      --accent-wash: oklch(0.570 0.155 42 / 0.10);
+      --on-accent: oklch(0.985 0.004 85);
+    }
+    [data-theme="dark"] {
+      --paper: oklch(0.178 0.008 70);
+      --paper-2: oklch(0.224 0.009 70);
+      --ink: oklch(0.925 0.006 85);
+      --ink-2: oklch(0.735 0.008 78);
+      --ink-3: oklch(0.612 0.008 74);
+      --rule: oklch(0.302 0.010 72);
+      --rule-2: oklch(0.382 0.012 72);
+      --accent: oklch(0.740 0.145 55);
+      --accent-wash: oklch(0.740 0.145 55 / 0.14);
+      --on-accent: oklch(0.178 0.008 70);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .caret { display: inline-block; width: 7px; height: 15px; background: var(--accent); animation: caret 1.15s steps(1, end) infinite; }
+    @keyframes caret { 0%, 50% { opacity: 1 } 50.01%, 100% { opacity: 0 } }
+    .nav-a:hover { color: var(--ink); }
+    .nav-a:hover .nav-u { transform: scaleX(1); }
+    .nav-u { transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+    .toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .chip { transition: border-color 140ms ease, color 140ms ease, background 140ms ease; }
+    .chip:hover { border-color: var(--accent); }
+    .card { transition: border-color 160ms ease, transform 160ms ease; }
+    .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .card:hover .card-name { color: var(--accent); }
+    .card:hover .go { transform: translate(2px, -2px); }
+    .go { transition: transform 160ms ease; }
+    .textlink { border-bottom: 1px solid var(--rule-2); transition: border-color 160ms ease; }
+    .textlink:hover { border-bottom-color: var(--accent); }
+  </style>
+</helmet>
+
+<div data-theme="{{theme}}" style="background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100%;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 20px 48px; border-bottom: 1px solid var(--rule); background: var(--paper);">
+    <a href="#index" style="display: flex; align-items: center; gap: 7px; color: var(--ink);">
+      <span style="color: var(--accent); font-size: 13px; font-weight: 600;">~/</span>
+      <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.01em;">gerardo-martinez</span>
+      <span style="color: var(--ink-3); font-size: 13px;">/ projects</span>
+      <span class="caret"></span>
+    </a>
+    <nav style="display: flex; align-items: center; gap: 28px;">
+      <a class="nav-a" href="#index" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>index</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <a class="nav-a" href="#projects" style="display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 12px; letter-spacing: 0.09em;">
+        <span style="width: 6px; height: 6px; background: var(--accent);"></span>
+        <span>projects</span>
+      </a>
+      <a class="nav-a" href="#writing" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>writing</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <button class="toggle" onClick="{{toggleTheme}}" style="display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2); font-family: inherit; font-size: 11px; letter-spacing: 0.09em; cursor: pointer; transition: border-color 160ms ease, color 160ms ease;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+        <span>{{themeLabel}}</span>
+      </button>
+    </nav>
+  </header>
+
+  <section style="padding: 72px 48px 40px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px;">
+      <span style="color: var(--ink-3); font-size: 12px; letter-spacing: 0.16em;">$ ls projects/</span>
+      <h1 style="margin: 0; font-size: 54px; line-height: 1.02; letter-spacing: -0.028em; font-weight: 600; color: var(--ink);">Projects</h1>
+      <p style="margin: 0; max-width: 62ch; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); text-wrap: pretty;">Things I built to answer a question I actually had. Most of them collect their own data, run on my own infrastructure, and are still running right now.</p>
+    </div>
+  </section>
+
+  <section style="padding: 0 48px 88px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px;">
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">FILTER BY STACK</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; letter-spacing: 0.1em;">{{countLabel}}</span>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+        <sc-for list="{{chips}}" as="chip" hint-placeholder-count="8">
+          <button class="chip" onClick="{{chip.pick}}" style="{{chip.style}}">{{chip.label}}</button>
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;">
+        <sc-for list="{{visible}}" as="p" hint-placeholder-count="4">
+          <a class="card" href="{{p.url}}" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+
+            <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+
+              <sc-if value="{{p.isPitch}}" hint-placeholder-val="{{true}}">
+                <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+                  <rect x="28" y="26" width="264" height="148" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+                  <path d="M160 26 L160 174" stroke="var(--rule-2)" stroke-width="1"></path>
+                  <circle cx="160" cy="100" r="28" fill="none" stroke="var(--rule-2)" stroke-width="1"></circle>
+                  <rect x="28" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+                  <rect x="262" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+                  <path d="M52 148 L96 112 L138 132 L176 88 L214 104 L262 68" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"></path>
+                  <g fill="var(--accent)">
+                    <circle cx="52" cy="148" r="3.2"></circle><circle cx="96" cy="112" r="3.2"></circle><circle cx="138" cy="132" r="3.2"></circle>
+                    <circle cx="176" cy="88" r="3.2"></circle><circle cx="214" cy="104" r="3.2"></circle><circle cx="262" cy="68" r="4.6"></circle>
+                  </g>
+                </svg>
+              </sc-if>
+
+              <sc-if value="{{p.isBars}}" hint-placeholder-val="{{false}}">
+                <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+                  <path d="M28 172 L292 172" stroke="var(--rule-2)" stroke-width="1"></path>
+                  <path d="M28 100 L292 100" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="2 5"></path>
+                  <path d="{{p.bars}}" fill="var(--accent)" opacity="0.85"></path>
+                </svg>
+              </sc-if>
+
+              <sc-if value="{{p.isLine}}" hint-placeholder-val="{{false}}">
+                <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+                  <path d="M28 172 L292 172" stroke="var(--rule-2)" stroke-width="1"></path>
+                  <path d="M28 128 L292 128 M28 84 L292 84 M28 40 L292 40" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="2 5"></path>
+                  <path d="{{p.area}}" fill="var(--accent)" opacity="0.14"></path>
+                  <path d="{{p.line}}" fill="none" stroke="var(--accent)" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"></path>
+                  <circle cx="{{p.endX}}" cy="{{p.endY}}" r="4.6" fill="var(--accent)"></circle>
+                </svg>
+              </sc-if>
+
+              <sc-if value="{{p.isGrid}}" hint-placeholder-val="{{false}}">
+                <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+                  <path d="{{p.cellsAll}}" fill="none" stroke="var(--rule-2)" stroke-width="1"></path>
+                  <path d="{{p.cellsOn}}" fill="var(--accent)" opacity="0.85"></path>
+                </svg>
+              </sc-if>
+
+              <span style="position: absolute; top: 12px; left: 14px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">{{p.kindLabel}}</span>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; padding: 22px 22px 24px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                <span class="card-name" style="font-size: 18px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); transition: color 160ms ease;">{{p.name}}</span>
+                <svg class="go" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+              </div>
+              <span style="font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3);">{{p.host}}</span>
+              <p style="margin: 0; font-size: 13px; line-height: 1.68; color: var(--ink-2); text-wrap: pretty;">{{p.blurb}}</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;">
+                <sc-for list="{{p.tech}}" as="t" hint-placeholder-count="5">
+                  <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">{{t}}</span>
+                </sc-for>
+              </div>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 56px 0; text-align: center; color: var(--ink-3); font-size: 13px; letter-spacing: 0.06em;">no projects match that filter yet</div>
+      </sc-if>
+
+    </div>
+  </section>
+
+  <footer style="padding: 0 48px 56px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-3);">
+      <span>gerardomarr.com</span>
+      <span>&copy; 2026 Gerardo Martinez</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":1280,"height":1790}}'>
+class Component extends DCLogic {
+
+  // ─────────────────────────────────────────────────────────────
+  // PROJECTS — the whole index lives here. Add an object to ship a
+  // new card; the stack filters above rebuild themselves from `tech`.
+  //   kind: 'pitch' | 'bars' | 'line' | 'grid'  (thumbnail motif)
+  //   series: the numbers the thumbnail is drawn from
+  // ─────────────────────────────────────────────────────────────
+  projects() {
+    return [
+      {
+        id: 'lacancha',
+        name: 'La Cancha',
+        host: 'lacancha.gerardomarr.com',
+        url: 'https://lacancha.gerardomarr.com',
+        kind: 'pitch',
+        kindLabel: 'FOOTBALL DATA',
+        blurb: 'An Astro front end on Azure Containers over a Postgres and PocketBase back end, fed live by Football-API and shipped through GitHub Actions.',
+        tech: ['Astro', 'Postgres', 'PocketBase', 'Azure', 'Football-API', 'GitHub Actions'],
+        series: [],
+      },
+      {
+        id: 'queuescope',
+        name: 'Queue Scope',
+        host: 'depelicula.gerardomarr.com',
+        url: 'https://depelicula.gerardomarr.com',
+        kind: 'bars',
+        kindLabel: 'QUEUE TELEMETRY',
+        blurb: 'A live wait-time dashboard for Universal Orlando. A cron collector polls themeparks.wiki every minute into SQLite; a FastAPI app charts how ride queues move across the day, week and month, with weather overlaid on the trend.',
+        tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
+        series: [34, 52, 71, 96, 88, 63, 47, 58, 82, 74, 45, 30],
+      },
+      {
+        id: 'trending',
+        name: 'Trending',
+        host: 'trending.gerardomarr.com',
+        url: 'https://trending.gerardomarr.com',
+        kind: 'line',
+        kindLabel: 'TREND SIGNAL',
+        blurb: 'What YouTube is pushing, tracked over time. A FastAPI service on an Azure VM collects and serves the data behind a static front end deployed to Azure Static Web Apps.',
+        tech: ['Python', 'FastAPI', 'Azure', 'GitHub Actions'],
+        series: [12, 18, 15, 27, 34, 30, 46, 58, 51, 72, 88, 96],
+      },
+      {
+        id: 'movies',
+        name: 'Movies MX',
+        host: 'movies.gerardomarr.com',
+        url: 'https://movies.gerardomarr.com',
+        kind: 'grid',
+        kindLabel: 'SCREENINGS',
+        blurb: 'A dashboard tracking which movies are being screened across Mexico, and how that mix shifts week to week.',
+        tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
+        series: [],
+      },
+    ]
+  }
+
+  // ── thumbnail geometry ───────────────────────────────────────
+  lastPoint(vals, pad) {
+    const w = 320, h = 200, n = vals.length
+    const max = Math.max(...vals), min = Math.min(...vals)
+    const span = (max - min) || 1
+    return {
+      x: (pad + (w - pad * 2)).toFixed(1),
+      y: ((h - pad) - ((vals[n - 1] - min) / span) * (h - pad * 2)).toFixed(1),
+    }
+  }
+
+  linePath(vals, pad) {
+    const w = 320, h = 200, n = vals.length
+    const max = Math.max(...vals), min = Math.min(...vals)
+    const span = (max - min) || 1
+    let d = ''
+    for (let i = 0; i < n; i++) {
+      const x = pad + (i / (n - 1)) * (w - pad * 2)
+      const y = (h - pad) - ((vals[i] - min) / span) * (h - pad * 2)
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' '
+    }
+    return d.trim()
+  }
+
+  areaPath(vals, pad) {
+    const w = 320, h = 200
+    return this.linePath(vals, pad) + ' L' + (w - pad) + ' ' + (h - pad) + ' L' + pad + ' ' + (h - pad) + ' Z'
+  }
+
+  barsPath(vals, pad, gap) {
+    const w = 320, h = 200, n = vals.length
+    const max = Math.max(...vals)
+    const bw = ((w - pad * 2) - gap * (n - 1)) / n
+    let d = ''
+    for (let i = 0; i < n; i++) {
+      const x = pad + i * (bw + gap)
+      const bh = (vals[i] / max) * (h - pad * 2)
+      const y = (h - pad) - bh
+      d += 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + ' h' + bw.toFixed(1) + ' v' + bh.toFixed(1) + ' h-' + bw.toFixed(1) + ' Z '
+    }
+    return d.trim()
+  }
+
+  cellsPath(cols, rows, pad, only) {
+    const w = 320, h = 200
+    const cw = (w - pad * 2) / cols, ch = (h - pad * 2) / rows
+    const s = Math.min(cw, ch) - 5
+    let d = ''
+    for (let i = 0; i < cols * rows; i++) {
+      if (only && only.indexOf(i) === -1) continue
+      const r = Math.floor(i / cols), c = i % cols
+      const x = pad + c * cw, y = pad + r * ch
+      d += 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + ' h' + s.toFixed(1) + ' v' + s.toFixed(1) + ' h-' + s.toFixed(1) + ' Z '
+    }
+    return d.trim()
+  }
+
+  decorate(p) {
+    const on = [1, 2, 5, 8, 9, 11, 14, 17, 18, 19, 22, 25, 26, 29, 33, 34, 37]
+    return Object.assign({}, p, {
+      isPitch: p.kind === 'pitch',
+      isBars: p.kind === 'bars',
+      isLine: p.kind === 'line',
+      isGrid: p.kind === 'grid',
+      bars: p.kind === 'bars' ? this.barsPath(p.series, 28, 6) : '',
+      line: p.kind === 'line' ? this.linePath(p.series, 28) : '',
+      area: p.kind === 'line' ? this.areaPath(p.series, 28) : '',
+      endX: p.kind === 'line' ? this.lastPoint(p.series, 28).x : '',
+      endY: p.kind === 'line' ? this.lastPoint(p.series, 28).y : '',
+      cellsAll: p.kind === 'grid' ? this.cellsPath(8, 5, 28, null) : '',
+      cellsOn: p.kind === 'grid' ? this.cellsPath(8, 5, 28, on) : '',
+    })
+  }
+
+  chipStyle(active) {
+    const base = 'padding: 6px 11px; font-family: inherit; font-size: 11px; letter-spacing: 0.06em; cursor: pointer; '
+    return active
+      ? base + 'background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent);'
+      : base + 'background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2);'
+  }
+
+  pad2(n) {
+    return (n < 10 ? '0' : '') + n
+  }
+
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light'
+    const active = this.state.filter ?? 'all'
+    const all = this.projects()
+
+    const counts = {}
+    all.forEach((p) => p.tech.forEach((t) => { counts[t] = (counts[t] || 0) + 1 }))
+    const tags = Object.keys(counts).sort((a, b) => (counts[b] - counts[a]) || a.localeCompare(b))
+
+    const chips = ['all'].concat(tags).map((t) => ({
+      label: t,
+      style: this.chipStyle(t === active),
+      pick: () => this.setState({ filter: t }),
+    }))
+
+    const visible = all
+      .filter((p) => active === 'all' || p.tech.indexOf(active) !== -1)
+      .map((p) => this.decorate(p))
+
+    return {
+      theme,
+      themeLabel: theme === 'dark' ? 'light' : 'dark',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      chips,
+      visible,
+      isEmpty: visible.length === 0,
+      countLabel: this.pad2(visible.length) + ' / ' + this.pad2(all.length),
+    }
+  }
+}
+</script>
+</body>
+</html>

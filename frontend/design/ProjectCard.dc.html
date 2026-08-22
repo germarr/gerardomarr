@@ -1,0 +1,261 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    [data-theme] {
+      --paper: oklch(0.973 0.006 85);
+      --paper-2: oklch(0.958 0.008 82);
+      --ink: oklch(0.245 0.012 62);
+      --ink-2: oklch(0.455 0.010 68);
+      --ink-3: oklch(0.536 0.008 72);
+      --rule: oklch(0.885 0.008 80);
+      --rule-2: oklch(0.815 0.010 78);
+      --accent: oklch(0.570 0.155 42);
+      --accent-wash: oklch(0.570 0.155 42 / 0.10);
+      --on-accent: oklch(0.985 0.004 85);
+    }
+    [data-theme="dark"] {
+      --paper: oklch(0.178 0.008 70);
+      --paper-2: oklch(0.224 0.009 70);
+      --ink: oklch(0.925 0.006 85);
+      --ink-2: oklch(0.735 0.008 78);
+      --ink-3: oklch(0.612 0.008 74);
+      --rule: oklch(0.302 0.010 72);
+      --rule-2: oklch(0.382 0.012 72);
+      --accent: oklch(0.740 0.145 55);
+      --accent-wash: oklch(0.740 0.145 55 / 0.14);
+      --on-accent: oklch(0.178 0.008 70);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .chip { transition: border-color 140ms ease, color 140ms ease, background 140ms ease; }
+    .chip:hover { border-color: var(--accent); }
+  </style>
+</helmet>
+
+<div data-theme="{{theme}}" style="background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100%; padding: 48px;">
+  <div style="max-width: 1184px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px;">
+
+    <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; padding-bottom: 22px; border-bottom: 1px solid var(--rule);">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span style="color: var(--ink-3); font-size: 11px; letter-spacing: 0.2em;">COMPONENT</span>
+        <h1 style="margin: 0; font-size: 34px; line-height: 1.1; letter-spacing: -0.024em; font-weight: 600; color: var(--ink);">ProjectCard</h1>
+        <p style="margin: 0; max-width: 58ch; font-size: 13px; line-height: 1.7; color: var(--ink-2);">One entry from the projects dictionary. Thumbnail, name, host, one-paragraph blurb, and the stack as bordered tags. The whole card is the link.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 7px;">
+        <sc-for list="{{stateChips}}" as="chip" hint-placeholder-count="3">
+          <button class="chip" onClick="{{chip.pick}}" style="{{chip.style}}">{{chip.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 420px minmax(0, 1fr); gap: 56px; align-items: start;">
+
+      <!-- live state preview -->
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <span style="color: var(--ink-3); font-size: 11px; font-weight: 600; letter-spacing: 0.2em;">STATE: {{stateLabel}}</span>
+        <div style="padding: 28px; background: var(--paper-2); border: 1px dashed var(--rule-2);">
+          <div style="{{cardStyle}}">
+            <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+              <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+                <path d="M28 172 L292 172" stroke="var(--rule-2)" stroke-width="1"></path>
+                <path d="M28 100 L292 100" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="2 5"></path>
+                <path d="M28.0 121.0 h16.5 v51.0 h-16.5 Z M50.5 94.0 h16.5 v78.0 h-16.5 Z M73.0 65.5 h16.5 v106.5 h-16.5 Z M95.5 28.0 h16.5 v144.0 h-16.5 Z M118.0 40.0 h16.5 v132.0 h-16.5 Z M140.5 77.5 h16.5 v94.5 h-16.5 Z M163.0 101.5 h16.5 v70.5 h-16.5 Z M185.5 85.0 h16.5 v87.0 h-16.5 Z M208.0 49.0 h16.5 v123.0 h-16.5 Z M230.5 61.0 h16.5 v111.0 h-16.5 Z M253.0 104.5 h16.5 v67.5 h-16.5 Z M275.5 127.0 h16.5 v45.0 h-16.5 Z" fill="var(--accent)" opacity="0.85"></path>
+              </svg>
+              <span style="position: absolute; top: 12px; left: 14px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">QUEUE TELEMETRY</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px; padding: 22px 22px 24px;">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+                <span style="{{nameStyle}}">Queue Scope</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="{{arrowStyle}}" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+              </div>
+              <span style="font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3);">depelicula.gerardomarr.com</span>
+              <p style="margin: 0; font-size: 13px; line-height: 1.68; color: var(--ink-2); text-wrap: pretty;">A live wait-time dashboard for Universal Orlando, charting how ride queues move across the day, week and month.</p>
+              <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;">
+                <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Python</span>
+                <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">FastAPI</span>
+                <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">SQLite</span>
+                <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">pandas</span>
+                <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Chart.js</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- anatomy + spec -->
+      <div style="display: flex; flex-direction: column; gap: 26px;">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <span style="color: var(--ink-3); font-size: 11px; font-weight: 600; letter-spacing: 0.2em;">ANATOMY</span>
+          <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        </div>
+
+        <div style="display: flex; flex-direction: column;">
+          <sc-for list="{{spec}}" as="row" hint-placeholder-count="8">
+            <div style="display: grid; grid-template-columns: 172px minmax(0, 1fr); gap: 24px; padding: 13px 0; border-top: 1px solid var(--rule);">
+              <span style="font-size: 11.5px; letter-spacing: 0.08em; color: var(--accent);">{{row.slot}}</span>
+              <span style="font-size: 12.5px; line-height: 1.6; color: var(--ink-2);">{{row.detail}}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+          <span style="color: var(--ink-3); font-size: 11px; font-weight: 600; letter-spacing: 0.2em;">DATA SHAPE</span>
+          <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        </div>
+        <pre style="margin: 0; padding: 20px 22px; background: var(--paper-2); border: 1px solid var(--rule); overflow-x: auto; font-size: 12.5px; line-height: 1.75; color: var(--ink-2);"><code>{
+  name:  'Queue Scope',
+  host:  'depelicula.gerardomarr.com',
+  url:   'https://depelicula.gerardomarr.com',
+  kind:  'bars',            // pitch | bars | line | grid
+  kindLabel: 'QUEUE TELEMETRY',
+  blurb: 'A live wait-time dashboard for ...',
+  tech:  ['Python', 'FastAPI', 'SQLite', 'pandas'],
+  series: [34, 52, 71, 96, 88, 63, 47, 58],
+}</code></pre>
+      </div>
+    </div>
+
+    <!-- thumbnail motifs -->
+    <div style="display: flex; flex-direction: column; gap: 20px; padding-top: 8px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--ink-3); font-size: 11px; font-weight: 600; letter-spacing: 0.2em;">THUMBNAIL MOTIFS</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11px; letter-spacing: 0.08em;">shape only — wire each to the project's real series, or drop in a screenshot</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <rect x="28" y="26" width="264" height="148" fill="none" stroke="var(--rule-2)"></rect>
+              <path d="M160 26 L160 174" stroke="var(--rule-2)"></path>
+              <circle cx="160" cy="100" r="28" fill="none" stroke="var(--rule-2)"></circle>
+              <rect x="28" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)"></rect>
+              <rect x="262" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)"></rect>
+              <path d="M52 148 L96 112 L138 132 L176 88 L214 104 L262 68" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"></path>
+              <g fill="var(--accent)"><circle cx="52" cy="148" r="3.6"></circle><circle cx="138" cy="132" r="3.6"></circle><circle cx="262" cy="68" r="5"></circle></g>
+            </svg>
+          </div>
+          <span style="font-size: 11px; letter-spacing: 0.08em; color: var(--ink-2);">pitch — match / football data</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <path d="M28 172 L292 172" stroke="var(--rule-2)"></path>
+              <path d="M28 100 L292 100" stroke="var(--rule-2)" stroke-dasharray="2 5"></path>
+              <path d="M28.0 121.0 h16.5 v51.0 h-16.5 Z M50.5 94.0 h16.5 v78.0 h-16.5 Z M73.0 65.5 h16.5 v106.5 h-16.5 Z M95.5 28.0 h16.5 v144.0 h-16.5 Z M118.0 40.0 h16.5 v132.0 h-16.5 Z M140.5 77.5 h16.5 v94.5 h-16.5 Z M163.0 101.5 h16.5 v70.5 h-16.5 Z M185.5 85.0 h16.5 v87.0 h-16.5 Z M208.0 49.0 h16.5 v123.0 h-16.5 Z M230.5 61.0 h16.5 v111.0 h-16.5 Z M253.0 104.5 h16.5 v67.5 h-16.5 Z M275.5 127.0 h16.5 v45.0 h-16.5 Z" fill="var(--accent)" opacity="0.85"></path>
+            </svg>
+          </div>
+          <span style="font-size: 11px; letter-spacing: 0.08em; color: var(--ink-2);">bars — a value per period</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <path d="M28 172 L292 172" stroke="var(--rule-2)"></path>
+              <path d="M28 128 L292 128 M28 84 L292 84 M28 40 L292 40" stroke="var(--rule-2)" stroke-dasharray="2 5"></path>
+              <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0 L292 172 L28 172 Z" fill="var(--accent)" opacity="0.14"></path>
+              <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+              <circle cx="292" cy="28" r="5" fill="var(--accent)"></circle>
+            </svg>
+          </div>
+          <span style="font-size: 11px; letter-spacing: 0.08em; color: var(--ink-2);">line — a trend over time</span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <path d="{{cellsAll}}" fill="none" stroke="var(--rule-2)"></path>
+              <path d="{{cellsOn}}" fill="var(--accent)" opacity="0.85"></path>
+            </svg>
+          </div>
+          <span style="font-size: 11px; letter-spacing: 0.08em; color: var(--ink-2);">grid — presence across a matrix</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":1280,"height":1180}}'>
+class Component extends DCLogic {
+
+  cellsPath(cols, rows, pad, only) {
+    const w = 320, h = 200
+    const cw = (w - pad * 2) / cols, ch = (h - pad * 2) / rows
+    const s = Math.min(cw, ch) - 5
+    let d = ''
+    for (let i = 0; i < cols * rows; i++) {
+      if (only && only.indexOf(i) === -1) continue
+      const r = Math.floor(i / cols), c = i % cols
+      const x = pad + c * cw, y = pad + r * ch
+      d += 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + ' h' + s.toFixed(1) + ' v' + s.toFixed(1) + ' h-' + s.toFixed(1) + ' Z '
+    }
+    return d.trim()
+  }
+
+  chipStyle(active) {
+    const base = 'padding: 7px 12px; font-family: inherit; font-size: 11px; letter-spacing: 0.06em; cursor: pointer; '
+    return active
+      ? base + 'background: var(--accent); border: 1px solid var(--accent); color: var(--on-accent);'
+      : base + 'background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2);'
+  }
+
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light'
+    const cardState = this.state.cardState ?? 'default'
+
+    const states = ['default', 'hover', 'focus']
+    const stateChips = states.map((s) => ({
+      label: s,
+      style: this.chipStyle(s === cardState),
+      pick: () => this.setState({ cardState: s }),
+    }))
+
+    const cardBase = 'display: flex; flex-direction: column; background: var(--paper-2); transition: border-color 160ms ease, transform 160ms ease; '
+    const byState = {
+      default: cardBase + 'border: 1px solid var(--rule);',
+      hover: cardBase + 'border: 1px solid var(--accent); transform: translateY(-3px);',
+      focus: cardBase + 'border: 1px solid var(--accent); outline: 2px solid var(--accent); outline-offset: 3px;',
+    }
+
+    return {
+      theme,
+      stateChips,
+      stateLabel: cardState.toUpperCase(),
+      cardStyle: byState[cardState],
+      nameStyle: 'font-size: 18px; font-weight: 600; letter-spacing: -0.012em; color: '
+        + (cardState === 'default' ? 'var(--ink)' : 'var(--accent)') + ';',
+      arrowStyle: cardState === 'default' ? '' : 'transform: translate(2px, -2px);',
+      cellsAll: this.cellsPath(8, 5, 28, null),
+      cellsOn: this.cellsPath(8, 5, 28, [1, 2, 5, 8, 9, 11, 14, 17, 18, 19, 22, 25, 26, 29, 33, 34, 37]),
+      spec: [
+        { slot: 'frame', detail: '1px solid rule, no radius, raised surface. Body padding 22px on the index, 18px in the home grid. Hover lifts 3px and turns the border accent.' },
+        { slot: 'thumbnail', detail: '16:10 everywhere. Bottom border only, no radius.' },
+        { slot: 'motif label', detail: '9.5px, 0.16em tracking, top-left inside the thumbnail. Two or three words.' },
+        { slot: 'name', detail: '18px / 600 / -0.012em on the 2-up index; 15px / 600 in the 3-up home grid. Turns accent on hover.' },
+        { slot: 'host', detail: '11px, tertiary ink. The bare domain, no protocol.' },
+        { slot: 'blurb', detail: '13px / 1.68 on the index, 12.5px / 1.6 in the home grid. Two to four lines — what it does and what it runs on.' },
+        { slot: 'tech tags', detail: '10px in a 1px bordered box, 5px gap, wraps freely. 4x8 padding on the index, 3x7 in the home grid.' },
+        { slot: 'link', detail: 'The whole card is one anchor. The arrow is decoration, not a second target.' },
+      ],
+    }
+  }
+}
+</script>
+</body>
+</html>

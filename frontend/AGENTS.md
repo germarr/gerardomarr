@@ -13,6 +13,18 @@ npm test
 npm run typecheck
 ```
 
+`npm test` runs `remix test`, not Node's test runner. This matters: under
+`node --test`, `remix/test`'s `describe`/`it` only register tests into an
+in-memory array and nothing ever executes them — a test body containing an
+unconditional `throw` still reports `pass, fail 0`. If you change the test
+script, verify a deliberately failing test actually fails.
+
+`playwright` is a devDependency even though there are no browser tests. It is
+required by `remix test` itself: `@remix-run/test`'s compiled runner has an
+unconditional import of `./playwright.js`, which statically imports
+`playwright`, so the CLI cannot start without it even for server-only tests.
+Do not remove it until upstream drops that import.
+
 ## Building Features
 
 Refer to ./.agents/skills/remix/SKILL.md
@@ -38,6 +50,26 @@ Refer to ./.agents/skills/remix/SKILL.md
 
 ## Build-Out Notes
 
-- This starter intentionally begins small; add directories like `app/data/` and `test/` only when you need them.
 - Prefer putting code in the narrowest owner before introducing shared modules.
 - Avoid generic dumping-ground directories like `app/lib/` or `app/components/`.
+- `app/data/`, `app/ui/`, `app/utils/`, `posts/` and `test/` all exist and are
+  load-bearing. See README.md for what lives where.
+
+## Two things that will waste your time if you don't know them
+
+**`css()` scopes each component's styles to its own `@layer`, and layer order
+follows render order.** A parent's rule targeting a descendant — `'&:hover
+.card-title'` — is declared in an earlier layer than the child's own styles and
+therefore **silently loses, regardless of specificity**. The rule compiles, the
+CSS is present, and nothing happens. This once left every hover on the site dead
+while two code reviews confirmed "the CSS is there."
+
+Style each element from its own `css()`. If a parent must drive a child's
+appearance, set an inherited custom property on the parent's own `&:hover` and
+read it in the child with `var(--x, fallback)` — see `app/ui/project-card.tsx`.
+`app/cascade-layers.test.ts` fails the build on the bad pattern.
+
+**The design in `design/*.dc.html` outranks any instruction.** Those artboards
+are what the site owner reviewed and approved. Where a task description and the
+design disagree about a value, the design wins — say so rather than silently
+picking one.
