@@ -2378,7 +2378,6 @@ Create `app/ui/article-body.tsx`:
 import { css, type Handle, type RemixNode } from 'remix/ui'
 import type { Token } from 'marked'
 
-import { headingId } from '../data/posts.ts'
 import { FONT_MONO, FONT_SANS } from './theme.ts'
 
 /**
@@ -2473,7 +2472,10 @@ const HEADING_3 = {
 function block(token: any, key: number): RemixNode {
   switch (token.type) {
     case 'heading': {
-      let id = headingId(token.text)
+      // posts.ts assigns this at parse time, de-duplicated per post. Do NOT
+      // recompute it here — the contents list links to these exact ids, and
+      // two independent passes would disagree the moment dedupe kicks in.
+      let id = token.id
       if (token.depth <= 2) {
         return <h2 key={key} id={id} mix={css(HEADING_2)}>{inline(token.tokens ?? [])}</h2>
       }
