@@ -76,7 +76,35 @@ function BlockToken(handle: Handle<{ token: any }>) {
         )
       case 'hr':
         return <div mix={hrStyle} />
+      case 'table': {
+        let align: (string | null)[] = token.align ?? []
+        let headerCells = (token.header ?? []).map((cell: any, columnIndex: number) => (
+          <th key={columnIndex} mix={css({ ...thBaseProps, textAlign: align[columnIndex] ?? 'left' })}>
+            <InlineTokens tokens={inlineTokensOf(cell)} />
+          </th>
+        ))
+        let bodyRows = (token.rows ?? []).map((row: any[], rowIndex: number) => (
+          <tr key={rowIndex}>
+            {row.map((cell: any, columnIndex: number) => (
+              <td key={columnIndex} mix={css({ ...tdBaseProps, textAlign: align[columnIndex] ?? 'left' })}>
+                <InlineTokens tokens={inlineTokensOf(cell)} />
+              </td>
+            ))}
+          </tr>
+        ))
+        return (
+          <div mix={tableWrapperStyle}>
+            <table mix={tableStyle}>
+              <thead>
+                <tr>{headerCells}</tr>
+              </thead>
+              <tbody>{bodyRows}</tbody>
+            </table>
+          </div>
+        )
+      }
       default:
+        console.warn(`ArticleBody: no renderer for markdown block type "${token.type}" - it will not appear on the page`)
         return null
     }
   }
@@ -231,3 +259,29 @@ const imageStyle = css({
   height: 'auto',
   border: '1px solid var(--rule)',
 })
+
+const tableWrapperStyle = css({
+  overflowX: 'auto',
+})
+
+const tableStyle = css({
+  width: '100%',
+  borderCollapse: 'collapse',
+  fontFamily: FONT_MONO,
+  fontSize: '13.5px',
+  lineHeight: 1.6,
+})
+
+const thBaseProps = {
+  padding: '10px 14px',
+  borderBottom: '1px solid var(--rule-2)',
+  color: 'var(--ink)',
+  fontWeight: 600,
+  letterSpacing: '0.04em',
+}
+
+const tdBaseProps = {
+  padding: '10px 14px',
+  borderBottom: '1px solid var(--rule)',
+  color: 'var(--ink-2)',
+}
