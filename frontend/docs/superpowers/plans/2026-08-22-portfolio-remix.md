@@ -208,6 +208,11 @@ describe('parseFrontMatter', () => {
     let empty = SAMPLE.replace('[mmm, marketing-science]', '[]')
     assert.deepEqual(parseFrontMatter(empty, 'a.md').frontMatter.tags, [])
   })
+
+  it('returns an empty body when nothing follows the closing delimiter', () => {
+    let noBody = `---\ntitle: "T"\nhook: "H"\ndate: 2026-01-01\nminutes: 3\ntags: []\nimage: ""\n---`
+    assert.equal(parseFrontMatter(noBody, 'nobody.md').body, '')
+  })
 })
 ```
 
@@ -257,7 +262,10 @@ export function parseFrontMatter(source: string, filename: string): ParsedFile {
   }
 
   let block = text.slice(DELIMITER.length + 1, end)
-  let body = text.slice(text.indexOf('\n', end + 1) + 1).trim()
+  // -1 when nothing follows the closing delimiter; slice(0) would otherwise
+  // return the whole document, front matter included.
+  let bodyStart = text.indexOf('\n', end + 1)
+  let body = bodyStart === -1 ? '' : text.slice(bodyStart + 1).trim()
 
   let fields = new Map<string, string>()
   for (let line of block.split('\n')) {
