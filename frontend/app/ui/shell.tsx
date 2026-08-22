@@ -36,6 +36,25 @@ export function Shell(handle: Handle<ShellProps>) {
 
     return (
       <Document title={title} description={description}>
+        <a
+          href="#main"
+          mix={css({
+            position: 'absolute',
+            left: '-9999px',
+            top: 0,
+            zIndex: 30,
+            padding: '10px 16px',
+            background: 'var(--paper-2)',
+            border: '1px solid var(--accent)',
+            color: 'var(--ink)',
+            fontSize: '12px',
+            letterSpacing: '0.08em',
+            '&:focus': { left: '8px', top: '8px' },
+          })}
+        >
+          Skip to content
+        </a>
+
         <header mix={headerStyle}>
           {backTo ? (
             <>
@@ -56,7 +75,7 @@ export function Shell(handle: Handle<ShellProps>) {
             </>
           )}
         </header>
-        <main>{children}</main>
+        <main id="main">{children}</main>
         <Footer />
       </Document>
     )
