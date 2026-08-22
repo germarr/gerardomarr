@@ -54,8 +54,8 @@ export const pageBase = {
   fontSize: '14px',
   lineHeight: 1.5,
   WebkitFontSmoothing: 'antialiased',
-  '& *, & *::before, & *::after': { boxSizing: 'border-box' },
-  '& a': { color: 'var(--accent)', textDecoration: 'none' },
+  '& *, & *::before, & *::after': { boxSizing: 'border-box' }, // cascade-layer-base
+  '& a': { color: 'var(--accent)', textDecoration: 'none' }, // cascade-layer-base
 }
 
 /** Shared card/link hover recipe used by both card components. */

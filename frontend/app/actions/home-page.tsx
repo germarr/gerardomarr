@@ -417,8 +417,11 @@ const socialCardStyle = css({
   border: '1px solid var(--rule)',
   background: 'var(--paper-2)',
   transition: 'border-color 160ms ease',
-  '&:hover': { borderColor: 'var(--accent)' },
-  '&:hover .social-name': { color: 'var(--accent)' },
+  // The name colour travels down as an inherited custom property. A
+  // '&:hover .social-name' rule here would sit in this component's layer and
+  // silently lose to the name span's own later layer -- see
+  // app/cascade-layers.test.ts.
+  '&:hover': { borderColor: 'var(--accent)', '--social-name-color': 'var(--accent)' },
 })
 
 const socialCardTextStyle = css({
@@ -431,7 +434,7 @@ const socialCardTextStyle = css({
 const socialCardNameStyle = css({
   fontSize: '13px',
   fontWeight: 500,
-  color: 'var(--ink)',
+  color: 'var(--social-name-color, var(--ink))',
   transition: 'color 160ms ease',
 })
 
