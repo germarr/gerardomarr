@@ -176,6 +176,14 @@ const headerStyle = css({
   borderBottom: '1px solid var(--rule)',
   background: 'var(--paper)',
   position: 'relative',
+  // MobileMenu's open nav panel relies on this: it sets flexBasis: '100%',
+  // which -- combined with wrap -- forces it onto its own full-width line
+  // below the wordmark/controls row instead of squeezing into it. Removing
+  // `wrap` doesn't error, it just silently pulls the panel back onto the
+  // top row (shrinking the wordmark) or off it into overflow. No-op
+  // whenever the panel isn't rendered: every desktop view, and mobile
+  // whenever the menu is closed.
+  flexWrap: 'wrap',
   '@media (max-width: 720px)': { padding: '12px 20px' },
 })
 

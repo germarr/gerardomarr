@@ -31,7 +31,7 @@ export const MobileMenu = clientEntry(
       return (
         <>
           <div mix={wrapperStyle}>
-            <ThemeToggle />
+            <ThemeToggle compact />
             <button
               type="button"
               aria-label={open ? 'Close menu' : 'Open menu'}
@@ -125,11 +125,11 @@ const buttonStyle = css({
 const panelStyle = css({
   display: 'flex',
   flexDirection: 'column',
-  position: 'absolute',
-  top: '100%',
-  left: 0,
-  right: 0,
-  zIndex: 20,
+  // Never fits alongside the wordmark + controls on header's line, so it
+  // wraps onto its own full-width line below them (see the flexWrap
+  // comment on shell.tsx's headerStyle) -- a normal in-flow block, not an
+  // overlay, so it pushes the rest of the page down.
+  flexBasis: '100%',
   background: 'var(--paper)',
   borderTop: '1px solid var(--rule)',
 })
