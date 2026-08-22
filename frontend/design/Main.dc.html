@@ -1,0 +1,371 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    [data-theme] {
+      --paper: oklch(0.973 0.006 85);
+      --paper-2: oklch(0.958 0.008 82);
+      --ink: oklch(0.245 0.012 62);
+      --ink-2: oklch(0.455 0.010 68);
+      --ink-3: oklch(0.615 0.008 72);
+      --rule: oklch(0.885 0.008 80);
+      --rule-2: oklch(0.815 0.010 78);
+      --accent: oklch(0.575 0.155 42);
+      --accent-wash: oklch(0.575 0.155 42 / 0.10);
+      --on-accent: oklch(0.985 0.004 85);
+    }
+    [data-theme="dark"] {
+      --paper: oklch(0.178 0.008 70);
+      --paper-2: oklch(0.224 0.009 70);
+      --ink: oklch(0.925 0.006 85);
+      --ink-2: oklch(0.735 0.008 78);
+      --ink-3: oklch(0.575 0.008 74);
+      --rule: oklch(0.302 0.010 72);
+      --rule-2: oklch(0.382 0.012 72);
+      --accent: oklch(0.740 0.145 55);
+      --accent-wash: oklch(0.740 0.145 55 / 0.14);
+      --on-accent: oklch(0.178 0.008 70);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .caret { display: inline-block; width: 7px; height: 15px; background: var(--accent); animation: caret 1.15s steps(1, end) infinite; }
+    @keyframes caret { 0%, 50% { opacity: 1 } 50.01%, 100% { opacity: 0 } }
+    .nav-a:hover { color: var(--ink); }
+    .nav-a:hover .nav-u { transform: scaleX(1); }
+    .nav-u { transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+    .toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .card { transition: border-color 160ms ease, transform 160ms ease; }
+    .card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .card:hover .card-name { color: var(--accent); }
+    .card:hover .go { transform: translate(2px, -2px); }
+    .go { transition: transform 160ms ease; }
+    .post:hover .post-title { color: var(--accent); }
+    .post:hover .go { transform: translate(2px, -2px); }
+    .post:hover .plate { border-color: var(--accent); }
+    .plate { transition: border-color 160ms ease; }
+    .social:hover { border-color: var(--accent); }
+    .social:hover .social-name { color: var(--accent); }
+    .textlink { border-bottom: 1px solid var(--rule-2); transition: border-color 160ms ease; }
+    .textlink:hover { border-bottom-color: var(--accent); }
+  </style>
+</helmet>
+
+<div data-theme="{{theme}}" style="background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100%;">
+
+  <!-- ── header ─────────────────────────────────────────────── -->
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 20px 48px; border-bottom: 1px solid var(--rule); background: var(--paper);">
+    <a href="#index" style="display: flex; align-items: center; gap: 7px; color: var(--ink);">
+      <span style="color: var(--accent); font-size: 13px; font-weight: 600;">~/</span>
+      <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.01em;">gerardo-martinez</span>
+      <span class="caret"></span>
+    </a>
+    <nav style="display: flex; align-items: center; gap: 28px;">
+      <a class="nav-a" href="#index" style="display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 12px; letter-spacing: 0.09em;">
+        <span style="width: 6px; height: 6px; background: var(--accent);"></span>
+        <span>index</span>
+      </a>
+      <a class="nav-a" href="#projects" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>projects</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <a class="nav-a" href="#writing" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>writing</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <button class="toggle" onClick="{{toggleTheme}}" style="display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2); font-family: inherit; font-size: 11px; letter-spacing: 0.09em; cursor: pointer; transition: border-color 160ms ease, color 160ms ease;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+        <span>{{themeLabel}}</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ── hero ───────────────────────────────────────────────── -->
+  <section id="index" style="padding: 96px 48px 80px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 34px;">
+      <span style="color: var(--ink-3); font-size: 12px; letter-spacing: 0.16em;">$ whoami</span>
+      <h1 style="margin: 0; font-size: 76px; line-height: 0.98; letter-spacing: -0.025em; font-weight: 600; color: var(--ink);">Gerardo<br>Martinez</h1>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <span style="padding: 6px 11px; border: 1px solid var(--rule-2); font-size: 11.5px; letter-spacing: 0.05em; color: var(--ink-2);">Applied Data</span>
+        <span style="padding: 6px 11px; border: 1px solid var(--rule-2); font-size: 11.5px; letter-spacing: 0.05em; color: var(--ink-2);">Marketing Science</span>
+        <span style="padding: 6px 11px; border: 1px solid var(--rule-2); font-size: 11.5px; letter-spacing: 0.05em; color: var(--ink-2);">Python</span>
+        <span style="padding: 6px 11px; border: 1px solid var(--rule-2); font-size: 11.5px; letter-spacing: 0.05em; color: var(--ink-2);">AI on the Edge</span>
+      </div>
+      <p style="margin: 0; max-width: 68ch; font-size: 15px; line-height: 1.75; color: var(--ink-2); text-wrap: pretty;">Data Scientist with expertise in Marketing Mix Models, campaign optimization, and full-funnel marketing analytics. Outside work I chase alternative datasets — football, theme parks, prediction markets, and trend analysis across YouTube, TikTok and Reddit. Real-world events are the messiest, most interesting modeling problems there are.</p>
+      <div style="display: flex; align-items: center; gap: 22px; margin-top: 6px;">
+        <a class="textlink" href="[YOUR GITHUB URL]" style="display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.05em;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.8a10.2 10.2 0 0 0-3.2 19.9c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.7-4.6 4.9.3.3.7 1 .7 2v3c0 .3.2.6.7.5A10.2 10.2 0 0 0 12 1.8Z"></path></svg>
+          <span>GitHub</span>
+        </a>
+        <a class="textlink" href="[YOUR LINKEDIN URL]" style="display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.05em;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm6.5 0h3.8v1.5h.06a4.2 4.2 0 0 1 3.78-2c4 0 4.76 2.6 4.76 6v5.5h-4v-4.9c0-1.2 0-2.7-1.7-2.7s-1.96 1.3-1.96 2.6v5h-4v-11Z"></path></svg>
+          <span>LinkedIn</span>
+        </a>
+        <a class="textlink" href="[YOUR INSTAGRAM URL]" style="display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.05em;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg>
+          <span>Instagram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 01 about ───────────────────────────────────────────── -->
+  <section id="about" style="padding: 24px 48px 88px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.1em;">01</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">ABOUT</span>
+      </div>
+      <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 56px; align-items: start;">
+        <p style="margin: 0; font-size: 23px; line-height: 1.38; letter-spacing: -0.012em; color: var(--ink); text-wrap: pretty;">Most data scientists hand their models off at the door. I started on the other side of that door.</p>
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.78; color: var(--ink-2); text-wrap: pretty;">Before the Python, the MMM models and the statistics, I was thinking in campaigns, briefs, creatives, channel strategy. Then a master's degree pulled me toward the science, and I realized I had something most people don't: I could see marketing the way a data scientist does, and data the way a marketer does.</p>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.78; color: var(--ink-2); text-wrap: pretty;">For eight years, six of them embedded inside marketing teams, I've used that lens to optimize spend across channels, connect what the numbers say to what teams actually do, and drag insights all the way from "huh, interesting" to "let's ship it."</p>
+          <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 8px;">
+            <span style="color: var(--accent); font-size: 17px; font-weight: 600;">&gt;</span>
+            <p style="margin: 0; font-size: 17px; line-height: 1.5; color: var(--ink); font-weight: 500;">The model isn't the work. Getting it used is the work.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 02 projects ────────────────────────────────────────── -->
+  <section id="projects" style="padding: 0 48px 88px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.1em;">02</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">SELECTED PROJECTS</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+
+        <a class="card" href="https://lacancha.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+          <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <rect x="28" y="26" width="264" height="148" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+              <path d="M160 26 L160 174" stroke="var(--rule-2)" stroke-width="1"></path>
+              <circle cx="160" cy="100" r="28" fill="none" stroke="var(--rule-2)" stroke-width="1"></circle>
+              <rect x="28" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+              <rect x="262" y="64" width="30" height="72" fill="none" stroke="var(--rule-2)" stroke-width="1"></rect>
+              <path d="M52 148 L96 112 L138 132 L176 88 L214 104 L262 68" fill="none" stroke="var(--accent)" stroke-width="1.6" stroke-linejoin="round"></path>
+              <g fill="var(--accent)">
+                <circle cx="52" cy="148" r="3.2"></circle><circle cx="96" cy="112" r="3.2"></circle><circle cx="138" cy="132" r="3.2"></circle>
+                <circle cx="176" cy="88" r="3.2"></circle><circle cx="214" cy="104" r="3.2"></circle><circle cx="262" cy="68" r="4.6"></circle>
+              </g>
+            </svg>
+            <span style="position: absolute; top: 11px; left: 13px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">FOOTBALL DATA</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 20px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <span class="card-name" style="font-size: 15px; font-weight: 600; color: var(--ink); transition: color 160ms ease;">La Cancha</span>
+              <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+            </div>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">lacancha.gerardomarr.com</span>
+            <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty;">An Astro front end on Azure Containers over a Postgres and PocketBase back end, fed live by Football-API and shipped through GitHub Actions.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;">
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Astro</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Postgres</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">PocketBase</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Azure</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="card" href="https://depelicula.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+          <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <path d="M28 172 L292 172" stroke="var(--rule-2)" stroke-width="1"></path>
+              <path d="M28 100 L292 100" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="2 5"></path>
+              <path d="M28.0 121.0 h16.5 v51.0 h-16.5 Z M50.5 94.0 h16.5 v78.0 h-16.5 Z M73.0 65.5 h16.5 v106.5 h-16.5 Z M95.5 28.0 h16.5 v144.0 h-16.5 Z M118.0 40.0 h16.5 v132.0 h-16.5 Z M140.5 77.5 h16.5 v94.5 h-16.5 Z M163.0 101.5 h16.5 v70.5 h-16.5 Z M185.5 85.0 h16.5 v87.0 h-16.5 Z M208.0 49.0 h16.5 v123.0 h-16.5 Z M230.5 61.0 h16.5 v111.0 h-16.5 Z M253.0 104.5 h16.5 v67.5 h-16.5 Z M275.5 127.0 h16.5 v45.0 h-16.5 Z" fill="var(--accent)" opacity="0.85"></path>
+            </svg>
+            <span style="position: absolute; top: 11px; left: 13px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">QUEUE TELEMETRY</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 20px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <span class="card-name" style="font-size: 15px; font-weight: 600; color: var(--ink); transition: color 160ms ease;">Queue Scope</span>
+              <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+            </div>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">depelicula.gerardomarr.com</span>
+            <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty;">A live wait-time dashboard for Universal Orlando. A cron collector polls themeparks.wiki every minute into SQLite; a FastAPI app charts how ride queues move across the day, week and month, with weather overlaid.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;">
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Python</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">FastAPI</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">SQLite</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">pandas</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Chart.js</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="card" href="https://trending.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+          <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+            <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+              <path d="M28 172 L292 172" stroke="var(--rule-2)" stroke-width="1"></path>
+              <path d="M28 128 L292 128 M28 84 L292 84 M28 40 L292 40" stroke="var(--rule-2)" stroke-width="1" stroke-dasharray="2 5"></path>
+              <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0 L292 172 L28 172 Z" fill="var(--accent)" opacity="0.14"></path>
+              <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0" fill="none" stroke="var(--accent)" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round"></path>
+              <circle cx="292" cy="28" r="4.6" fill="var(--accent)"></circle>
+            </svg>
+            <span style="position: absolute; top: 11px; left: 13px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">TREND SIGNAL</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 20px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px;">
+              <span class="card-name" style="font-size: 15px; font-weight: 600; color: var(--ink); transition: color 160ms ease;">Trending</span>
+              <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+            </div>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">trending.gerardomarr.com</span>
+            <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty;">What YouTube is pushing, tracked over time. A FastAPI service on an Azure VM collects and serves the data behind a static front end.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px;">
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Python</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">FastAPI</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">Azure</span>
+              <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">GitHub Actions</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <a class="textlink" href="#all-projects" style="align-self: flex-start; display: flex; align-items: center; gap: 9px; color: var(--ink); font-size: 12.5px; letter-spacing: 0.06em; padding-bottom: 2px;">
+        <span>See all projects</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 03 writing ─────────────────────────────────────────── -->
+  <section id="writing" style="padding: 0 48px 88px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.1em;">03</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">RECENT WRITING</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+
+        <a class="post" href="#post-1" style="display: grid; grid-template-columns: 208px minmax(0, 1fr) auto; gap: 28px; align-items: start; padding: 26px 0; border-top: 1px solid var(--rule);">
+          <div class="plate" style="position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(135deg, var(--accent-wash) 0 2px, transparent 2px 9px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">01</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+              <span>[DATE]</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>[N] MIN</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>posts/post-01.md</span>
+            </div>
+            <span class="post-title" style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); transition: color 160ms ease;">[TITLE — up to about 60 characters]</span>
+            <p style="margin: 0; max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters, on what the reader walks away with.]</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 8px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.09em;">
+            <span>read</span>
+            <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+
+        <a class="post" href="#post-2" style="display: grid; grid-template-columns: 208px minmax(0, 1fr) auto; gap: 28px; align-items: start; padding: 26px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);">
+          <div class="plate" style="position: relative; aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(45deg, var(--accent-wash) 0 2px, transparent 2px 9px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">02</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+              <span>[DATE]</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>[N] MIN</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>posts/post-02.md</span>
+            </div>
+            <span class="post-title" style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); transition: color 160ms ease;">[TITLE — up to about 60 characters]</span>
+            <p style="margin: 0; max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters, on what the reader walks away with.]</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 8px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.09em;">
+            <span>read</span>
+            <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+
+      </div>
+
+      <a class="textlink" href="#all-writing" style="align-self: flex-start; display: flex; align-items: center; gap: 9px; color: var(--ink); font-size: 12.5px; letter-spacing: 0.06em; padding-bottom: 2px;">
+        <span>All writing</span>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 04 elsewhere ───────────────────────────────────────── -->
+  <footer style="padding: 0 48px 64px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--accent); font-size: 12px; font-weight: 600; letter-spacing: 0.1em;">04</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">ELSEWHERE</span>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+        <a class="social" href="[YOUR GITHUB URL]" style="display: flex; align-items: center; gap: 14px; padding: 20px; border: 1px solid var(--rule); background: var(--paper-2); transition: border-color 160ms ease;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ink)" aria-hidden="true"><path d="M12 1.8a10.2 10.2 0 0 0-3.2 19.9c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.7-4.6 4.9.3.3.7 1 .7 2v3c0 .3.2.6.7.5A10.2 10.2 0 0 0 12 1.8Z"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
+            <span class="social-name" style="font-size: 13px; font-weight: 500; color: var(--ink); transition: color 160ms ease;">GitHub</span>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">github.com/[handle]</span>
+          </div>
+          <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </a>
+        <a class="social" href="[YOUR LINKEDIN URL]" style="display: flex; align-items: center; gap: 14px; padding: 20px; border: 1px solid var(--rule); background: var(--paper-2); transition: border-color 160ms ease;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--ink)" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm6.5 0h3.8v1.5h.06a4.2 4.2 0 0 1 3.78-2c4 0 4.76 2.6 4.76 6v5.5h-4v-4.9c0-1.2 0-2.7-1.7-2.7s-1.96 1.3-1.96 2.6v5h-4v-11Z"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
+            <span class="social-name" style="font-size: 13px; font-weight: 500; color: var(--ink); transition: color 160ms ease;">LinkedIn</span>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">linkedin.com/in/[handle]</span>
+          </div>
+          <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </a>
+        <a class="social" href="[YOUR INSTAGRAM URL]" style="display: flex; align-items: center; gap: 14px; padding: 20px; border: 1px solid var(--rule); background: var(--paper-2); transition: border-color 160ms ease;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="var(--ink)" stroke="none"></circle></svg>
+          <div style="display: flex; flex-direction: column; gap: 4px; flex-grow: 1;">
+            <span class="social-name" style="font-size: 13px; font-weight: 500; color: var(--ink); transition: color 160ms ease;">Instagram</span>
+            <span style="font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-3);">instagram.com/[handle]</span>
+          </div>
+          <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </a>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 20px; border-top: 1px solid var(--rule); font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-3);">
+        <span>gerardomarr.com</span>
+        <span>&copy; 2026 Gerardo Martinez</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":1280,"height":2760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light'
+    return {
+      theme,
+      themeLabel: theme === 'dark' ? 'light' : 'dark',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+    }
+  }
+}
+</script>
+</body>
+</html>

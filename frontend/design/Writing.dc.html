@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    [data-theme] {
+      --paper: oklch(0.973 0.006 85);
+      --paper-2: oklch(0.958 0.008 82);
+      --ink: oklch(0.245 0.012 62);
+      --ink-2: oklch(0.455 0.010 68);
+      --ink-3: oklch(0.615 0.008 72);
+      --rule: oklch(0.885 0.008 80);
+      --rule-2: oklch(0.815 0.010 78);
+      --accent: oklch(0.575 0.155 42);
+      --accent-wash: oklch(0.575 0.155 42 / 0.10);
+      --on-accent: oklch(0.985 0.004 85);
+    }
+    [data-theme="dark"] {
+      --paper: oklch(0.178 0.008 70);
+      --paper-2: oklch(0.224 0.009 70);
+      --ink: oklch(0.925 0.006 85);
+      --ink-2: oklch(0.735 0.008 78);
+      --ink-3: oklch(0.575 0.008 74);
+      --rule: oklch(0.302 0.010 72);
+      --rule-2: oklch(0.382 0.012 72);
+      --accent: oklch(0.740 0.145 55);
+      --accent-wash: oklch(0.740 0.145 55 / 0.14);
+      --on-accent: oklch(0.178 0.008 70);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .caret { display: inline-block; width: 7px; height: 15px; background: var(--accent); animation: caret 1.15s steps(1, end) infinite; }
+    @keyframes caret { 0%, 50% { opacity: 1 } 50.01%, 100% { opacity: 0 } }
+    .nav-a:hover { color: var(--ink); }
+    .nav-a:hover .nav-u { transform: scaleX(1); }
+    .nav-u { transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+    .toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .go { transition: transform 160ms ease; }
+    .lead:hover { border-color: var(--accent); }
+    .lead:hover .lead-title { color: var(--accent); }
+    .lead:hover .go { transform: translate(2px, -2px); }
+    .post:hover .post-title { color: var(--accent); }
+    .post:hover .go { transform: translate(2px, -2px); }
+    .post:hover .plate { border-color: var(--accent); }
+    .plate { transition: border-color 160ms ease; }
+  </style>
+</helmet>
+
+<div data-theme="{{theme}}" style="background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100%;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 32px; padding: 20px 48px; border-bottom: 1px solid var(--rule); background: var(--paper);">
+    <a href="#index" style="display: flex; align-items: center; gap: 7px; color: var(--ink);">
+      <span style="color: var(--accent); font-size: 13px; font-weight: 600;">~/</span>
+      <span style="font-size: 13px; font-weight: 500; letter-spacing: 0.01em;">gerardo-martinez</span>
+      <span style="color: var(--ink-3); font-size: 13px;">/ writing</span>
+      <span class="caret"></span>
+    </a>
+    <nav style="display: flex; align-items: center; gap: 28px;">
+      <a class="nav-a" href="#index" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>index</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <a class="nav-a" href="#projects" style="display: flex; flex-direction: column; gap: 3px; color: var(--ink-2); font-size: 12px; letter-spacing: 0.09em;">
+        <span>projects</span>
+        <span class="nav-u" style="height: 1px; background: var(--accent);"></span>
+      </a>
+      <a class="nav-a" href="#writing" style="display: flex; align-items: center; gap: 8px; color: var(--ink); font-size: 12px; letter-spacing: 0.09em;">
+        <span style="width: 6px; height: 6px; background: var(--accent);"></span>
+        <span>writing</span>
+      </a>
+      <button class="toggle" onClick="{{toggleTheme}}" style="display: flex; align-items: center; gap: 7px; padding: 7px 11px; background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2); font-family: inherit; font-size: 11px; letter-spacing: 0.09em; cursor: pointer; transition: border-color 160ms ease, color 160ms ease;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+        <span>{{themeLabel}}</span>
+      </button>
+    </nav>
+  </header>
+
+  <section style="padding: 72px 48px 44px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 26px;">
+      <span style="color: var(--ink-3); font-size: 12px; letter-spacing: 0.16em;">$ ls posts/*.md</span>
+      <h1 style="margin: 0; font-size: 54px; line-height: 1.02; letter-spacing: -0.028em; font-weight: 600; color: var(--ink);">Writing</h1>
+      <p style="margin: 0; max-width: 62ch; font-size: 14.5px; line-height: 1.75; color: var(--ink-2); text-wrap: pretty;">Notes on modelling messy, real-world data — and on the part nobody writes about, which is getting a model used by people who did not build it.</p>
+    </div>
+  </section>
+
+  <!-- ── featured ───────────────────────────────────────────── -->
+  <section style="padding: 0 48px 56px;">
+    <div style="max-width: 1080px; margin: 0 auto;">
+      <a class="lead" href="#post-1" style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 0; border: 1px solid var(--rule); background: var(--paper-2); transition: border-color 160ms ease;">
+        <div style="position: relative; aspect-ratio: 4 / 3; background: var(--paper); background-image: repeating-linear-gradient(135deg, var(--accent-wash) 0 2px, transparent 2px 10px); border-right: 1px solid var(--rule); display: flex; align-items: center; justify-content: center;">
+          <span style="font-size: 96px; font-weight: 600; letter-spacing: -0.04em; color: var(--paper); -webkit-text-stroke: 1.5px var(--accent);">01</span>
+          <span style="position: absolute; top: 14px; left: 16px; font-size: 9.5px; letter-spacing: 0.16em; color: var(--ink-3);">LATEST</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 18px; padding: 40px 40px 36px;">
+          <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+            <span>[DATE]</span>
+            <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+            <span>[N] MIN</span>
+            <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+            <span>posts/post-01.md</span>
+          </div>
+          <span class="lead-title" style="font-size: 32px; font-weight: 600; line-height: 1.2; letter-spacing: -0.022em; color: var(--ink); transition: color 160ms ease; text-wrap: balance;">[TITLE — up to about 60 characters]</span>
+          <p style="margin: 0; font-size: 14.5px; line-height: 1.7; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters. What does the reader walk away with? Write it to survive on its own, in a feed, read by someone deciding in two seconds.]</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">[tag]</span>
+            <span style="padding: 4px 8px; border: 1px solid var(--rule-2); font-size: 10px; letter-spacing: 0.05em; color: var(--ink-2);">[tag]</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 9px; margin-top: auto; padding-top: 16px; color: var(--accent); font-size: 12px; letter-spacing: 0.09em;">
+            <span>read the piece</span>
+            <svg class="go" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── archive ────────────────────────────────────────────── -->
+  <section style="padding: 0 48px 88px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="color: var(--ink-3); font-size: 11.5px; font-weight: 600; letter-spacing: 0.2em;">EARLIER</span>
+        <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+        <span style="color: var(--ink-3); font-size: 11.5px; letter-spacing: 0.1em;">03 POSTS</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column;">
+
+        <a class="post" href="#post-2" style="display: grid; grid-template-columns: 208px minmax(0, 1fr) auto; gap: 28px; align-items: start; padding: 26px 0; border-top: 1px solid var(--rule);">
+          <div class="plate" style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(45deg, var(--accent-wash) 0 2px, transparent 2px 9px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">02</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+              <span>[DATE]</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>[N] MIN</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>posts/post-02.md</span>
+            </div>
+            <span class="post-title" style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); transition: color 160ms ease;">[TITLE — up to about 60 characters]</span>
+            <p style="margin: 0; max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters, on what the reader walks away with.]</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 8px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.09em;">
+            <span>read</span>
+            <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+
+        <a class="post" href="#post-3" style="display: grid; grid-template-columns: 208px minmax(0, 1fr) auto; gap: 28px; align-items: start; padding: 26px 0; border-top: 1px solid var(--rule);">
+          <div class="plate" style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(90deg, var(--accent-wash) 0 2px, transparent 2px 11px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">03</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+              <span>[DATE]</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>[N] MIN</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>posts/post-03.md</span>
+            </div>
+            <span class="post-title" style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); transition: color 160ms ease;">[TITLE — up to about 60 characters]</span>
+            <p style="margin: 0; max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters, on what the reader walks away with.]</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 8px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.09em;">
+            <span>read</span>
+            <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+
+        <a class="post" href="#post-4" style="display: grid; grid-template-columns: 208px minmax(0, 1fr) auto; gap: 28px; align-items: start; padding: 26px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);">
+          <div class="plate" style="aspect-ratio: 16 / 10; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(0deg, var(--accent-wash) 0 2px, transparent 2px 11px); display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 42px; font-weight: 600; letter-spacing: -0.03em; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">04</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 11px; padding-top: 4px;">
+            <div style="display: flex; align-items: center; gap: 12px; font-size: 10.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+              <span>[DATE]</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>[N] MIN</span>
+              <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+              <span>posts/post-04.md</span>
+            </div>
+            <span class="post-title" style="font-size: 21px; font-weight: 600; letter-spacing: -0.015em; color: var(--ink); transition: color 160ms ease;">[TITLE — up to about 60 characters]</span>
+            <p style="margin: 0; max-width: 62ch; font-size: 13.5px; line-height: 1.65; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence, about 140 characters, on what the reader walks away with.]</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 8px; color: var(--accent); font-size: 11.5px; letter-spacing: 0.09em;">
+            <span>read</span>
+            <svg class="go" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding: 0 48px 56px;">
+    <div style="max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 22px; border-top: 1px solid var(--rule); font-size: 10.5px; letter-spacing: 0.08em; color: var(--ink-3);">
+      <span>gerardomarr.com</span>
+      <span>&copy; 2026 Gerardo Martinez</span>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":1280,"height":1650}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light'
+    return {
+      theme,
+      themeLabel: theme === 'dark' ? 'light' : 'dark',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+    }
+  }
+}
+</script>
+</body>
+</html>

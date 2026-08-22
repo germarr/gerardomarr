@@ -1,0 +1,123 @@
+{
+  "pages": [
+    {
+      "id": "screens",
+      "name": "Screens"
+    },
+    {
+      "id": "components",
+      "name": "Components"
+    }
+  ],
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "page": "screens",
+      "title": "Home",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 2760
+    },
+    {
+      "file": "Projects.dc.html",
+      "page": "screens",
+      "title": "Projects",
+      "x": 1420,
+      "y": 0,
+      "w": 1280,
+      "h": 1790
+    },
+    {
+      "file": "Writing.dc.html",
+      "page": "screens",
+      "title": "Writing",
+      "x": 2840,
+      "y": 0,
+      "w": 1280,
+      "h": 1650
+    },
+    {
+      "file": "Article.dc.html",
+      "page": "screens",
+      "title": "Article",
+      "x": 4260,
+      "y": 0,
+      "w": 1280,
+      "h": 2580
+    },
+    {
+      "file": "HomeMobile.dc.html",
+      "page": "screens",
+      "title": "Home / 390px",
+      "x": 5680,
+      "y": 0,
+      "w": 390,
+      "h": 2820
+    },
+    {
+      "file": "ProjectCard.dc.html",
+      "page": "components",
+      "title": "ProjectCard",
+      "x": 0,
+      "y": 0,
+      "w": 1280,
+      "h": 1180
+    },
+    {
+      "file": "PostCard.dc.html",
+      "page": "components",
+      "title": "PostCard",
+      "x": 1420,
+      "y": 0,
+      "w": 1280,
+      "h": 1220
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-direction",
+      "page": "screens",
+      "x": 0,
+      "y": -230,
+      "w": 620,
+      "text": "TERMINAL INDEX\nIBM Plex Mono throughout (Plex Sans for article prose). Warm paper, warm near-black ink, one burnt-orange accent. Hairline rules and square corners instead of cards-with-radii.\n\nEvery screen has a working light/dark toggle in the header."
+    },
+    {
+      "id": "note-projects",
+      "page": "screens",
+      "x": 1420,
+      "y": -230,
+      "w": 520,
+      "text": "PROJECTS\nThe stack filter chips are live \u2014 click one. The whole index renders from a PROJECTS array; the chips rebuild themselves from each project's tech list, so adding a project is one object."
+    },
+    {
+      "id": "note-writing",
+      "page": "screens",
+      "x": 2840,
+      "y": -230,
+      "w": 520,
+      "text": "WRITING\nOne markdown file per post in posts/. Titles, hooks and dates are marked slots \u2014 nothing invented. The Article artboard next door is the type specimen for how the markdown renders."
+    },
+    {
+      "id": "note-mobile",
+      "page": "screens",
+      "x": 5680,
+      "y": -230,
+      "w": 420,
+      "text": "390px\nSame page at phone width. The menu button and theme toggle both work; every tap target is 44px or larger."
+    },
+    {
+      "id": "note-components",
+      "page": "components",
+      "x": 0,
+      "y": -230,
+      "w": 620,
+      "text": "The two card components, with their states, thumbnail motifs, and the data shape each one reads from. Click the chips top-right of each sheet to switch state or variant."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "screens"
+  }
+}

@@ -1,0 +1,269 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    [data-theme] {
+      --paper: oklch(0.973 0.006 85);
+      --paper-2: oklch(0.958 0.008 82);
+      --ink: oklch(0.245 0.012 62);
+      --ink-2: oklch(0.455 0.010 68);
+      --ink-3: oklch(0.615 0.008 72);
+      --rule: oklch(0.885 0.008 80);
+      --rule-2: oklch(0.815 0.010 78);
+      --accent: oklch(0.575 0.155 42);
+      --accent-wash: oklch(0.575 0.155 42 / 0.10);
+      --on-accent: oklch(0.985 0.004 85);
+    }
+    [data-theme="dark"] {
+      --paper: oklch(0.178 0.008 70);
+      --paper-2: oklch(0.224 0.009 70);
+      --ink: oklch(0.925 0.006 85);
+      --ink-2: oklch(0.735 0.008 78);
+      --ink-3: oklch(0.575 0.008 74);
+      --rule: oklch(0.302 0.010 72);
+      --rule-2: oklch(0.382 0.012 72);
+      --accent: oklch(0.740 0.145 55);
+      --accent-wash: oklch(0.740 0.145 55 / 0.14);
+      --on-accent: oklch(0.178 0.008 70);
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent); }
+    .caret { display: inline-block; width: 6px; height: 14px; background: var(--accent); animation: caret 1.15s steps(1, end) infinite; }
+    @keyframes caret { 0%, 50% { opacity: 1 } 50.01%, 100% { opacity: 0 } }
+  </style>
+</helmet>
+
+<div data-theme="{{theme}}" style="background: var(--paper); color: var(--ink); font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; min-height: 100%; width: 100%;">
+
+  <!-- ── header ─────────────────────────────────────────────── -->
+  <header style="display: flex; flex-direction: column; border-bottom: 1px solid var(--rule); background: var(--paper);">
+    <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px;">
+      <a href="#index" style="display: flex; align-items: center; gap: 6px; color: var(--ink); min-height: 44px; align-self: center;">
+        <span style="color: var(--accent); font-size: 12.5px; font-weight: 600;">~/</span>
+        <span style="font-size: 12.5px; font-weight: 500;">gerardo-martinez</span>
+        <span class="caret"></span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button onClick="{{toggleTheme}}" aria-label="Toggle theme" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 1px solid var(--rule-2); color: var(--ink-2); cursor: pointer;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+        <button onClick="{{toggleMenu}}" aria-label="Menu" style="display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 1px solid var(--rule-2); color: var(--ink); cursor: pointer;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+            <path d="{{menuIcon1}}"></path>
+            <path d="{{menuIcon2}}"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <sc-if value="{{menuOpen}}" hint-placeholder-val="{{false}}">
+      <nav style="display: flex; flex-direction: column; border-top: 1px solid var(--rule);">
+        <a href="#index" style="display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 20px; color: var(--ink); font-size: 14px; letter-spacing: 0.08em; border-bottom: 1px solid var(--rule);">
+          <span style="width: 6px; height: 6px; background: var(--accent);"></span>
+          <span>index</span>
+        </a>
+        <a href="#projects" style="display: flex; align-items: center; min-height: 52px; padding: 0 36px; color: var(--ink-2); font-size: 14px; letter-spacing: 0.08em; border-bottom: 1px solid var(--rule);">projects</a>
+        <a href="#writing" style="display: flex; align-items: center; min-height: 52px; padding: 0 36px; color: var(--ink-2); font-size: 14px; letter-spacing: 0.08em; border-bottom: 1px solid var(--rule);">writing</a>
+      </nav>
+    </sc-if>
+  </header>
+
+  <!-- ── hero ───────────────────────────────────────────────── -->
+  <section style="padding: 44px 20px 40px; display: flex; flex-direction: column; gap: 22px;">
+    <span style="color: var(--ink-3); font-size: 11px; letter-spacing: 0.16em;">$ whoami</span>
+    <h1 style="margin: 0; font-size: 42px; line-height: 1.02; letter-spacing: -0.025em; font-weight: 600; color: var(--ink);">Gerardo<br>Martinez</h1>
+    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+      <span style="padding: 5px 9px; border: 1px solid var(--rule-2); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-2);">Applied Data</span>
+      <span style="padding: 5px 9px; border: 1px solid var(--rule-2); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-2);">Marketing Science</span>
+      <span style="padding: 5px 9px; border: 1px solid var(--rule-2); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-2);">Python</span>
+      <span style="padding: 5px 9px; border: 1px solid var(--rule-2); font-size: 10.5px; letter-spacing: 0.04em; color: var(--ink-2);">AI on the Edge</span>
+    </div>
+    <p style="margin: 0; font-size: 14px; line-height: 1.75; color: var(--ink-2); text-wrap: pretty;">Data Scientist with expertise in Marketing Mix Models, campaign optimization, and full-funnel marketing analytics. Outside work I chase alternative datasets — football, theme parks, prediction markets, and trend analysis across YouTube, TikTok and Reddit.</p>
+    <div style="display: flex; gap: 8px;">
+      <a href="[YOUR GITHUB URL]" aria-label="GitHub" style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--rule-2); color: var(--ink);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1.8a10.2 10.2 0 0 0-3.2 19.9c.5.1.7-.2.7-.5v-1.9c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.6.3-1.1.6-1.4-2.2-.2-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.4 4.7-4.6 4.9.3.3.7 1 .7 2v3c0 .3.2.6.7.5A10.2 10.2 0 0 0 12 1.8Z"></path></svg>
+      </a>
+      <a href="[YOUR LINKEDIN URL]" aria-label="LinkedIn" style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--rule-2); color: var(--ink);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9.5h4v11H3v-11Zm6.5 0h3.8v1.5h.06a4.2 4.2 0 0 1 3.78-2c4 0 4.76 2.6 4.76 6v5.5h-4v-4.9c0-1.2 0-2.7-1.7-2.7s-1.96 1.3-1.96 2.6v5h-4v-11Z"></path></svg>
+      </a>
+      <a href="[YOUR INSTAGRAM URL]" aria-label="Instagram" style="display: flex; align-items: center; justify-content: center; width: 46px; height: 46px; border: 1px solid var(--rule-2); color: var(--ink);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg>
+      </a>
+      <span style="font-size: 10px; line-height: 1.7; letter-spacing: 0.03em; color: var(--ink-3);">github.com/[handle] &middot; linkedin.com/in/[handle] &middot; instagram.com/[handle]</span>
+    </div>
+  </section>
+
+  <!-- ── 01 about ───────────────────────────────────────────── -->
+  <section style="padding: 0 20px 44px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.1em;">01</span>
+      <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+      <span style="color: var(--ink-3); font-size: 10.5px; font-weight: 600; letter-spacing: 0.2em;">ABOUT</span>
+    </div>
+    <p style="margin: 0; font-size: 18px; line-height: 1.42; letter-spacing: -0.01em; color: var(--ink); text-wrap: pretty;">Most data scientists hand their models off at the door. I started on the other side of that door.</p>
+    <p style="margin: 0; font-size: 13.5px; line-height: 1.78; color: var(--ink-2); text-wrap: pretty;">Before the Python, the MMM models and the statistics, I was thinking in campaigns, briefs, creatives, channel strategy. Then a master's degree pulled me toward the science, and I realized I could see marketing the way a data scientist does, and data the way a marketer does.</p>
+    <div style="display: flex; align-items: baseline; gap: 10px;">
+      <span style="color: var(--accent); font-size: 15px; font-weight: 600;">&gt;</span>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5; color: var(--ink); font-weight: 500;">The model isn't the work. Getting it used is the work.</p>
+    </div>
+  </section>
+
+  <!-- ── 02 projects ────────────────────────────────────────── -->
+  <section style="padding: 0 20px 44px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.1em;">02</span>
+      <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+      <span style="color: var(--ink-3); font-size: 10.5px; font-weight: 600; letter-spacing: 0.2em;">PROJECTS</span>
+    </div>
+
+    <a href="https://lacancha.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+      <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+        <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+          <rect x="28" y="26" width="264" height="148" fill="none" stroke="var(--rule-2)"></rect>
+          <path d="M160 26 L160 174" stroke="var(--rule-2)"></path>
+          <circle cx="160" cy="100" r="28" fill="none" stroke="var(--rule-2)"></circle>
+          <path d="M52 148 L96 112 L138 132 L176 88 L214 104 L262 68" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"></path>
+          <g fill="var(--accent)"><circle cx="52" cy="148" r="3.6"></circle><circle cx="138" cy="132" r="3.6"></circle><circle cx="262" cy="68" r="5"></circle></g>
+        </svg>
+        <span style="position: absolute; top: 10px; left: 12px; font-size: 9px; letter-spacing: 0.16em; color: var(--ink-3);">FOOTBALL DATA</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 16px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+          <span style="font-size: 15px; font-weight: 600; color: var(--ink);">La Cancha</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </div>
+        <span style="font-size: 10px; color: var(--ink-3);">lacancha.gerardomarr.com</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Astro</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Postgres</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Azure</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://depelicula.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+      <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+        <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+          <path d="M28 172 L292 172" stroke="var(--rule-2)"></path>
+          <path d="M28.0 121.0 h16.5 v51.0 h-16.5 Z M50.5 94.0 h16.5 v78.0 h-16.5 Z M73.0 65.5 h16.5 v106.5 h-16.5 Z M95.5 28.0 h16.5 v144.0 h-16.5 Z M118.0 40.0 h16.5 v132.0 h-16.5 Z M140.5 77.5 h16.5 v94.5 h-16.5 Z M163.0 101.5 h16.5 v70.5 h-16.5 Z M185.5 85.0 h16.5 v87.0 h-16.5 Z M208.0 49.0 h16.5 v123.0 h-16.5 Z M230.5 61.0 h16.5 v111.0 h-16.5 Z M253.0 104.5 h16.5 v67.5 h-16.5 Z M275.5 127.0 h16.5 v45.0 h-16.5 Z" fill="var(--accent)" opacity="0.85"></path>
+        </svg>
+        <span style="position: absolute; top: 10px; left: 12px; font-size: 9px; letter-spacing: 0.16em; color: var(--ink-3);">QUEUE TELEMETRY</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 16px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+          <span style="font-size: 15px; font-weight: 600; color: var(--ink);">Queue Scope</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </div>
+        <span style="font-size: 10px; color: var(--ink-3);">depelicula.gerardomarr.com</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Python</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">FastAPI</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">SQLite</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="https://trending.gerardomarr.com" style="display: flex; flex-direction: column; border: 1px solid var(--rule); background: var(--paper-2);">
+      <div style="position: relative; aspect-ratio: 16 / 10; border-bottom: 1px solid var(--rule); background: var(--paper);">
+        <svg viewBox="0 0 320 200" width="100%" height="100%" style="display: block;" aria-hidden="true">
+          <path d="M28 172 L292 172" stroke="var(--rule-2)"></path>
+          <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0 L292 172 L28 172 Z" fill="var(--accent)" opacity="0.14"></path>
+          <path d="M28.0 172.0 L52.0 161.7 L76.0 166.9 L100.0 146.3 L124.0 134.3 L148.0 141.1 L172.0 113.7 L196.0 93.1 L220.0 105.1 L244.0 69.1 L268.0 41.7 L292.0 28.0" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+          <circle cx="292" cy="28" r="5" fill="var(--accent)"></circle>
+        </svg>
+        <span style="position: absolute; top: 10px; left: 12px; font-size: 9px; letter-spacing: 0.16em; color: var(--ink-3);">TREND SIGNAL</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 9px; padding: 16px;">
+        <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+          <span style="font-size: 15px; font-weight: 600; color: var(--ink);">Trending</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"></path><path d="M8 7h9v9"></path></svg>
+        </div>
+        <span style="font-size: 10px; color: var(--ink-3);">trending.gerardomarr.com</span>
+        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Python</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">FastAPI</span>
+          <span style="padding: 3px 7px; border: 1px solid var(--rule-2); font-size: 10px; color: var(--ink-2);">Azure</span>
+        </div>
+      </div>
+    </a>
+
+    <a href="#all-projects" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 16px; border: 1px solid var(--rule-2); color: var(--ink); font-size: 12.5px; letter-spacing: 0.06em;">
+      <span>See all projects</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"></path><path d="M13 6l6 6-6 6"></path></svg>
+    </a>
+  </section>
+
+  <!-- ── 03 writing ─────────────────────────────────────────── -->
+  <section style="padding: 0 20px 44px; display: flex; flex-direction: column; gap: 20px;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 0.1em;">03</span>
+      <span style="flex-grow: 1; height: 1px; background: var(--rule);"></span>
+      <span style="color: var(--ink-3); font-size: 10.5px; font-weight: 600; letter-spacing: 0.2em;">WRITING</span>
+    </div>
+
+    <a href="#post-1" style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 16px; align-items: start; padding: 18px 0; border-top: 1px solid var(--rule);">
+      <div style="aspect-ratio: 1 / 1; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(135deg, var(--accent-wash) 0 2px, transparent 2px 9px); display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 28px; font-weight: 600; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">01</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 9px; font-size: 9.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+          <span>[DATE]</span>
+          <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+          <span>[N] MIN</span>
+        </div>
+        <span style="font-size: 16px; font-weight: 600; line-height: 1.3; letter-spacing: -0.012em; color: var(--ink);">[TITLE — up to about 60 characters]</span>
+        <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence on what the reader walks away with.]</p>
+      </div>
+    </a>
+
+    <a href="#post-2" style="display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 16px; align-items: start; padding: 18px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);">
+      <div style="aspect-ratio: 1 / 1; border: 1px solid var(--rule); background: var(--paper-2); background-image: repeating-linear-gradient(45deg, var(--accent-wash) 0 2px, transparent 2px 9px); display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 28px; font-weight: 600; color: var(--paper); -webkit-text-stroke: 1px var(--accent);">02</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 9px; font-size: 9.5px; letter-spacing: 0.1em; color: var(--ink-3);">
+          <span>[DATE]</span>
+          <span style="width: 3px; height: 3px; background: var(--rule-2);"></span>
+          <span>[N] MIN</span>
+        </div>
+        <span style="font-size: 16px; font-weight: 600; line-height: 1.3; letter-spacing: -0.012em; color: var(--ink);">[TITLE — up to about 60 characters]</span>
+        <p style="margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); text-wrap: pretty;">[HOOK — one sentence on what the reader walks away with.]</p>
+      </div>
+    </a>
+  </section>
+
+  <footer style="padding: 0 20px 40px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 10px; letter-spacing: 0.06em; color: var(--ink-3);">
+    <span>gerardomarr.com</span>
+    <span>&copy; 2026 Gerardo Martinez</span>
+  </footer>
+
+</div>
+</x-dc>
+
+<script data-dc-script data-props='{"theme":{"editor":"enum","options":["light","dark"],"default":"light","section":"Theme"},"$preview":{"width":390,"height":2820}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.state.theme ?? this.props.theme ?? 'light'
+    const menuOpen = this.state.menuOpen ?? false
+    return {
+      theme,
+      menuOpen,
+      menuIcon1: menuOpen ? 'M5 5 L19 19' : 'M4 8h16',
+      menuIcon2: menuOpen ? 'M19 5 L5 19' : 'M4 16h16',
+      toggleTheme: () => this.setState({ theme: theme === 'dark' ? 'light' : 'dark' }),
+      toggleMenu: () => this.setState({ menuOpen: !menuOpen }),
+    }
+  }
+}
+</script>
+</body>
+</html>
