@@ -11,9 +11,9 @@ export type ProjectCardVariant = 'index' | 'home'
 /**
  * Lifted from the rendered cards in design/Projects.dc.html (index) and
  * design/Main.dc.html (home) -- design/ProjectCard.dc.html's ANATOMY table
- * gives a single prose "11px" for host and doesn't call out the body gap,
- * the tag row's margin-top, or the home variant's bare (no letter-spacing)
- * name, all of which the two live pages render differently by variant.
+ * gives a single prose "11px" for host and doesn't call out the body gap
+ * or the home variant's bare (no letter-spacing) name, both of which the
+ * two live pages render differently by variant.
  */
 const SIZES = {
   index: {
@@ -25,7 +25,6 @@ const SIZES = {
     blurb: '13px',
     blurbLine: 1.68,
     tag: '4px 8px',
-    tagRowMarginTop: '6px',
     arrow: 14,
   },
   home: {
@@ -37,7 +36,6 @@ const SIZES = {
     blurb: '12.5px',
     blurbLine: 1.6,
     tag: '3px 7px',
-    tagRowMarginTop: '4px',
     arrow: 13,
   },
 } as const
@@ -50,6 +48,9 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
     return (
       <a
         href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${project.name}, ${project.host} (opens in a new tab)`}
         mix={css({
           display: 'flex',
           flexDirection: 'column',
@@ -66,6 +67,7 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
           mix={css({
             display: 'flex',
             flexDirection: 'column',
+            flex: '1 1 auto',
             gap: size.gap,
             padding: size.padding,
           })}
@@ -121,7 +123,7 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
               display: 'flex',
               flexWrap: 'wrap',
               gap: '5px',
-              marginTop: size.tagRowMarginTop,
+              marginTop: 'auto',
             })}
           >
             {project.tech.map((tag) => (
