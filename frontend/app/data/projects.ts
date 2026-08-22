@@ -7,7 +7,7 @@ export interface Project {
   host: string
   url: string
   kind: ProjectKind
-  /** Two or three words, shown top-left inside the thumbnail. */
+  /** A short all-caps label shown top-left inside the thumbnail. */
   kindLabel: string
   blurb: string
   /** Drives both the tags on the card and the stack filter. */
@@ -48,7 +48,7 @@ export const PROJECTS: Project[] = [
     kind: 'bars',
     kindLabel: 'QUEUE TELEMETRY',
     blurb:
-      'A live wait-time dashboard for Universal Orlando. A cron collector polls themeparks.wiki every minute into SQLite; a FastAPI app charts how ride queues move across the day, week and month, with weather overlaid on the trend.',
+      'A live wait-time dashboard for Universal Orlando. A cron collector polls themeparks.wiki every minute into SQLite; a FastAPI app then charts how ride queues move across the day, week, and month — with weather overlaid on the trend.',
     tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
     series: [34, 52, 71, 96, 88, 63, 47, 58, 82, 74, 45, 30],
     featured: true,
@@ -74,7 +74,7 @@ export const PROJECTS: Project[] = [
     kind: 'grid',
     kindLabel: 'SCREENINGS',
     blurb:
-      'A dashboard tracking which movies are being screened across Mexico, and how that mix shifts week to week.',
+      'A dashboard tracking which movies are being screened in Mexico.',
     tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
     series: [1, 2, 5, 8, 9, 11, 14, 17, 18, 19, 22, 25, 26, 29, 33, 34, 37],
     featured: false,
