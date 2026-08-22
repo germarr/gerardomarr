@@ -12,6 +12,14 @@ export interface TocEntry {
   depth: number
 }
 
+/**
+ * A `marked` heading token with its final, de-duplicated `id` attached by
+ * `readPost`. Task 12's renderer reads `id` straight off the token instead
+ * of recomputing it, so the anchor it renders always matches the id used
+ * in `contents`.
+ */
+export type HeadingToken = Token & { depth: number; text: string; id: string }
+
 export interface Post {
   slug: string
   title: string
@@ -50,6 +58,7 @@ function readPost(directory: string, filename: string): Post {
   let source = fs.readFileSync(path.join(directory, filename), 'utf8')
   let { frontMatter, body } = parseFrontMatter(source, filename)
   let tokens = marked.lexer(body).filter((token) => token.type !== 'space')
+  assignHeadingIds(tokens)
 
   return {
     slug: filename.replace(/\.md$/, ''),
@@ -66,18 +75,59 @@ function readPost(directory: string, filename: string): Post {
   }
 }
 
+/**
+ * Assign every heading token a final, unique `id`, mutating `tokens` in
+ * place. This is the single source of truth for heading ids: `contents`
+ * below reads the ids straight off the tokens it just annotated, and
+ * Task 12's renderer does the same, so the table of contents can never
+ * link to an anchor the renderer didn't also produce.
+ *
+ * Ids are de-duplicated per post by appending `-2`, `-3`, ... to repeats
+ * of the same base slug. A heading whose text reduces to an empty base
+ * (e.g. "¿?") falls back to `section-<n>`, keyed by that heading's
+ * 1-based position among all headings in the post, so it is still stable
+ * and unique rather than the empty string.
+ */
+function assignHeadingIds(tokens: Token[]): void {
+  let used = new Set<string>()
+  let headingIndex = 0
+
+  for (let token of tokens) {
+    if (token.type !== 'heading') continue
+    headingIndex++
+    let heading = token as HeadingToken
+    let base = headingId(heading.text) || `section-${headingIndex}`
+
+    let id = base
+    let suffix = 2
+    while (used.has(id)) {
+      id = `${base}-${suffix}`
+      suffix++
+    }
+    used.add(id)
+    heading.id = id
+  }
+}
+
 function buildContents(tokens: Token[]): TocEntry[] {
   let entries: TocEntry[] = []
   for (let token of tokens) {
     if (token.type !== 'heading') continue
-    let heading = token as Token & { depth: number; text: string }
+    let heading = token as HeadingToken
     if (heading.depth !== 2 && heading.depth !== 3) continue
-    entries.push({ id: headingId(heading.text), label: heading.text, depth: heading.depth })
+    entries.push({ id: heading.id, label: heading.text, depth: heading.depth })
   }
   return entries
 }
 
-/** Stable anchor id for a heading, matched by ArticleBody. */
+/**
+ * Base slug for a heading's text: lowercase, alphanumerics only, hyphen
+ * separated. Not unique on its own — two different headings can reduce to
+ * the same base (e.g. "Section: Overview" and "Section — Overview" both
+ * collapse to "section-overview"). `readPost`'s `assignHeadingIds` is the
+ * source of truth for the final, de-duplicated id attached to each heading
+ * token; call this directly only when you need the raw slug itself.
+ */
 export function headingId(text: string): string {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 }
