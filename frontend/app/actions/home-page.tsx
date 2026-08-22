@@ -10,7 +10,7 @@ const FONT_STACK =
 
 export function HomePage() {
   return () => (
-    <Document head={<HomeHead />}>
+    <Document>
       <main
         mix={css({
           // Light-mode design tokens (default).
@@ -60,19 +60,6 @@ export function HomePage() {
         </div>
       </main>
     </Document>
-  )
-}
-
-function HomeHead() {
-  return () => (
-    <>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap"
-      />
-    </>
   )
 }
 
