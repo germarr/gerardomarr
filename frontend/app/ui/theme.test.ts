@@ -9,9 +9,13 @@ describe('themeTokens', () => {
     assert.equal(themeTokens['--accent'], 'oklch(0.575 0.155 42)')
   })
 
-  it('overrides every token in dark mode', () => {
+  it('overrides every token in dark mode with a different value', () => {
     let dark = themeTokens['&[data-theme="dark"]'] as Record<string, string>
     let lightKeys = Object.keys(themeTokens).filter((key) => key.startsWith('--'))
-    for (let key of lightKeys) assert.equal(typeof dark[key], 'string')
+    assert.equal(lightKeys.length, 10)
+    for (let key of lightKeys) {
+      assert.equal(typeof dark[key], 'string')
+      assert.notEqual(dark[key], themeTokens[key])
+    }
   })
 })
