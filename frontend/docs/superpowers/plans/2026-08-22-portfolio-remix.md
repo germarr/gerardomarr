@@ -406,7 +406,7 @@ describe('barsPath', () => {
   })
 
   it('makes the tallest bar reach the top pad', () => {
-    assert.equal(barsPath([1, 2, 4], 28, 6).includes('M186.7 28.0'), true)
+    assert.equal(barsPath([1, 2, 4], 28, 6).includes('M208.0 28.0'), true)
   })
 })
 
