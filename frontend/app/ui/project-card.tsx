@@ -57,9 +57,12 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
           border: '1px solid var(--rule)',
           background: 'var(--paper-2)',
           transition: CARD_TRANSITION,
-          '&:hover': { borderColor: 'var(--accent)', transform: 'translateY(-3px)' },
-          '&:hover .card-name': { color: 'var(--accent)' },
-          '&:hover .card-go': { transform: 'translate(2px, -2px)' },
+          '&:hover': {
+            borderColor: 'var(--accent)',
+            transform: 'translateY(-3px)',
+            '--card-name-color': 'var(--accent)',
+            '--card-go-transform': 'translate(2px, -2px)',
+          },
         })}
       >
         <Thumbnail project={project} />
@@ -86,7 +89,7 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
                 fontSize: size.name,
                 fontWeight: 600,
                 letterSpacing: size.nameLetterSpacing,
-                color: 'var(--ink)',
+                color: 'var(--card-name-color, var(--ink))',
                 transition: 'color 160ms ease',
               })}
             >
@@ -98,6 +101,7 @@ export function ProjectCard(handle: Handle<{ project: Project; variant?: Project
               mix={css({
                 display: 'flex',
                 color: 'var(--accent)',
+                transform: 'var(--card-go-transform, translate(0, 0))',
                 transition: 'transform 160ms ease',
               })}
             >

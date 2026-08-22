@@ -110,8 +110,7 @@ function NavLink(handle: Handle<{ item: NavItem; active: boolean }>) {
           color: active ? 'var(--ink)' : 'var(--ink-2)',
           fontSize: '12px',
           letterSpacing: '0.09em',
-          '&:hover': { color: 'var(--ink)' },
-          '&:hover .nav-underline': active ? undefined : { transform: 'scaleX(1)' },
+          '&:hover': { color: 'var(--ink)', '--nav-underline-transform': 'scaleX(1)' },
         })}
       >
         {active ? (
@@ -124,7 +123,7 @@ function NavLink(handle: Handle<{ item: NavItem; active: boolean }>) {
             mix={css({
               height: '1px',
               background: 'var(--accent)',
-              transform: 'scaleX(0)',
+              transform: 'var(--nav-underline-transform, scaleX(0))',
               transformOrigin: 'left',
               transition: 'transform 180ms ease',
             })}

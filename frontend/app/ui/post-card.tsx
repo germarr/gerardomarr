@@ -33,11 +33,16 @@ function hatchBackground(variant: PostCardVariant, index: number): string {
 
 /**
  * `post.image` is a raw string from front matter, dropped straight into a
- * CSS `url(...)`. Escape backslashes and double quotes so a stray
- * character in the path can't break out of the string and inject CSS.
+ * CSS `url(...)`. Escape backslashes and double quotes, and strip raw
+ * newlines (CR, LF, FF), so a stray character in the path can't break out
+ * of the quoted string and inject CSS. An unescaped newline terminates a
+ * CSS string per spec, so escaping quotes/backslashes alone is not enough.
  */
-function cssUrl(value: string): string {
-  return `url("${value.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}")`
+export function cssUrl(value: string): string {
+  return `url("${value
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/[\n\r\f]/g, '')}")`
 }
 
 /**
@@ -135,11 +140,13 @@ export function PostCard(
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'border-color 160ms ease',
+          borderColor: 'var(--card-plate-border-color, var(--rule))',
           borderRight: variant === 'featured' ? '1px solid var(--rule)' : undefined,
         })}
       >
         {hasImage ? null : (
           <span
+            aria-hidden="true"
             mix={css({
               fontSize: size.ordinalSize,
               fontWeight: 600,
@@ -203,7 +210,7 @@ export function PostCard(
           fontWeight: 600,
           lineHeight: size.titleLine,
           letterSpacing: size.titleLetterSpacing,
-          color: 'var(--ink)',
+          color: 'var(--card-title-color, var(--ink))',
           transition: 'color 160ms ease',
           textWrap: size.titleBalance ? 'balance' : undefined,
         })}
@@ -250,25 +257,34 @@ export function PostCard(
       <span
         class="card-go"
         aria-hidden="true"
-        mix={css({ display: 'flex', transition: 'transform 160ms ease' })}
+        mix={css({
+          display: 'flex',
+          transform: 'var(--card-go-transform, translate(0, 0))',
+          transition: 'transform 160ms ease',
+        })}
       >
         <ArrowOut size={arrowSize} />
       </span>
     )
 
+    let ariaLabel = `${post.title} (${post.displayDate}, ${post.minutes} min read)`
+
     if (variant === 'featured') {
       return (
         <a
           href={routes.writing.post.href({ slug: post.slug })}
+          aria-label={ariaLabel}
           mix={css({
             display: 'grid',
             gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.05fr)',
             border: '1px solid var(--rule)',
             background: 'var(--paper-2)',
             transition: 'border-color 160ms ease',
-            '&:hover': { borderColor: 'var(--accent)' },
-            '&:hover .card-title': { color: 'var(--accent)' },
-            '&:hover .card-go': { transform: 'translate(2px, -2px)' },
+            '&:hover': {
+              borderColor: 'var(--accent)',
+              '--card-title-color': 'var(--accent)',
+              '--card-go-transform': 'translate(2px, -2px)',
+            },
             '@media (max-width: 860px)': { gridTemplateColumns: '1fr' },
           })}
         >
@@ -309,6 +325,7 @@ export function PostCard(
       return (
         <a
           href={routes.writing.post.href({ slug: post.slug })}
+          aria-label={ariaLabel}
           mix={css({
             display: 'grid',
             gridTemplateColumns: '208px minmax(0, 1fr) auto',
@@ -316,13 +333,14 @@ export function PostCard(
             alignItems: 'start',
             padding: '26px 0',
             borderTop: '1px solid var(--rule)',
-            '&:hover .card-plate': { borderColor: 'var(--accent)' },
-            '&:hover .card-title': { color: 'var(--accent)' },
-            '&:hover .card-go': { transform: 'translate(2px, -2px)' },
+            '&:hover': {
+              '--card-plate-border-color': 'var(--accent)',
+              '--card-title-color': 'var(--accent)',
+              '--card-go-transform': 'translate(2px, -2px)',
+            },
             '@media (max-width: 720px)': {
               gridTemplateColumns: '92px minmax(0, 1fr)',
               gap: '16px',
-              '& .card-read': { display: 'none' },
             },
           })}
         >
@@ -344,6 +362,7 @@ export function PostCard(
               color: 'var(--accent)',
               fontSize: '11.5px',
               letterSpacing: '0.09em',
+              '@media (max-width: 720px)': { display: 'none' },
             })}
           >
             <span>read</span>
@@ -356,12 +375,15 @@ export function PostCard(
     return (
       <a
         href={routes.writing.post.href({ slug: post.slug })}
+        aria-label={ariaLabel}
         mix={css({
           display: 'grid',
           gridTemplateColumns: '92px minmax(0, 1fr)',
           gap: '16px',
           alignItems: 'start',
-          '&:hover .card-title': { color: 'var(--accent)' },
+          padding: '18px 0',
+          borderTop: '1px solid var(--rule)',
+          '&:hover': { '--card-title-color': 'var(--accent)' },
         })}
       >
         {plate}
