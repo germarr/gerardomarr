@@ -60,10 +60,36 @@ describe('PROJECTS', () => {
 })
 
 describe('stackTags', () => {
-  it('derives tags from the projects themselves, most common first', () => {
+  it('derives its tags from the projects themselves', () => {
     let tags = stackTags()
-    assert.equal(tags.includes('Python'), true)
-    assert.equal(tags[0], 'FastAPI')
+    let everyTag = new Set(PROJECTS.flatMap((project) => project.tech))
+    assert.deepEqual([...tags].sort(), [...everyTag].sort())
+  })
+
+  // Asserts the ORDERING RULE, not a snapshot of today's data. An earlier
+  // version pinned tags[0] === 'FastAPI', which meant adding one perfectly
+  // ordinary project could turn the suite red -- exactly what the owner is
+  // told to do in projects.ts. Verify the rule against the real data instead.
+  it('orders tags by how many projects use them, then alphabetically', () => {
+    let counts = new Map<string, number>()
+    for (let project of PROJECTS) {
+      for (let tag of project.tech) counts.set(tag, (counts.get(tag) ?? 0) + 1)
+    }
+
+    let tags = stackTags()
+    for (let i = 1; i < tags.length; i++) {
+      let previous = tags[i - 1]!
+      let current = tags[i]!
+      let previousCount = counts.get(previous)!
+      let currentCount = counts.get(current)!
+
+      assert.equal(
+        previousCount > currentCount ||
+          (previousCount === currentCount && previous.localeCompare(current) < 0),
+        true,
+        `"${previous}" (${previousCount}) should not precede "${current}" (${currentCount})`,
+      )
+    }
   })
 
   it('lists each tag once', () => {

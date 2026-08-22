@@ -23,7 +23,7 @@ export const ABOUT: About = {
   name: 'Gerardo Martinez',
   tagline: ['Applied Data', 'Marketing Science', 'Python', 'AI on the Edge'],
   intro:
-    'Data Scientist with expertise in Marketing Mix Models, campaign optimization, and full-funnel marketing analytics. Outside work I chase alternative datasets — football, theme parks, prediction markets, and trend analysis across YouTube, TikTok and Reddit. Real-world events are the messiest, most interesting modeling problems there are.',
+    'Data Scientist with expertise in Marketing Mix Models, campaign optimization, and full-funnel marketing analytics. Outside work, I chase alternative datasets like football, theme parks, prediction markets and trend analysis in platforms like Youtube, TikTok and Reddit. Real-world events are the messiest, most interesting modeling problems there are.',
   lead:
     'Most data scientists hand their models off at the door. I started on the other side of that door.',
   body: [
