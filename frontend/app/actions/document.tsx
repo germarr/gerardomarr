@@ -1,7 +1,6 @@
 import type { Handle, RemixNode } from 'remix/ui'
 import { css } from 'remix/ui'
 
-type CSSProps = Parameters<typeof css>[0]
 
 import { entryHref, entryPreloads } from '../assets.ts'
 import { FONTS_HREF, pageBase, themeTokens } from '../ui/theme.ts'
@@ -23,7 +22,7 @@ export function Document(handle: Handle<DocumentProps>) {
     let { children, title = 'Gerardo Martinez', description } = handle.props
 
     return (
-      <html lang="en" data-theme="light" mix={css(themeTokens as CSSProps)}>
+      <html lang="en" data-theme="light" mix={css(themeTokens)}>
         <head>
           <meta charSet="utf-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -1,3 +1,5 @@
+import { css } from 'remix/ui'
+
 export const FONT_MONO = "'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace"
 export const FONT_SANS = "'IBM Plex Sans', system-ui, sans-serif"
 
@@ -8,7 +10,14 @@ export const FONTS_HREF =
  * Applied once, to <html>, so `data-theme` on the same element flips the
  * whole palette. Lifted from the helmet block in design/*.dc.html.
  */
-export const themeTokens: Record<string, unknown> = {
+/**
+ * remix/ui does not export the type `css()` accepts, so derive it here once.
+ * Typing the tokens as anything looser (Record<string, unknown>) pushes a cast
+ * onto every call site.
+ */
+export type CSSProps = Parameters<typeof css>[0]
+
+export const themeTokens: CSSProps = {
   '--paper': 'oklch(0.973 0.006 85)',
   '--paper-2': 'oklch(0.958 0.008 82)',
   '--ink': 'oklch(0.245 0.012 62)',
