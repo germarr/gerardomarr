@@ -34,7 +34,8 @@ export function parseFrontMatter(source: string, filename: string): ParsedFile {
   }
 
   let block = text.slice(DELIMITER.length + 1, end)
-  let body = text.slice(text.indexOf('\n', end + 1) + 1).trim()
+  let bodyStart = text.indexOf('\n', end + 1)
+  let body = bodyStart === -1 ? '' : text.slice(bodyStart + 1).trim()
 
   let fields = new Map<string, string>()
   for (let line of block.split('\n')) {

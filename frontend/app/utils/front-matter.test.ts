@@ -47,4 +47,10 @@ describe('parseFrontMatter', () => {
     let empty = SAMPLE.replace('[mmm, marketing-science]', '[]')
     assert.deepEqual(parseFrontMatter(empty, 'a.md').frontMatter.tags, [])
   })
+
+  it('returns an empty body when nothing follows the closing delimiter', () => {
+    let noBody = `---\ntitle: "T"\nhook: "H"\ndate: 2026-01-01\nminutes: 3\ntags: []\nimage: ""\n---`
+    let { body } = parseFrontMatter(noBody, 'nobody.md')
+    assert.equal(body, '')
+  })
 })
