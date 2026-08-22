@@ -6,7 +6,8 @@
     "dev": "NODE_ENV=development node --watch --import remix/node-tsx server.ts",
     "hmr": "NODE_ENV=development node hmr.ts",
     "start": "NODE_ENV=production node --import remix/node-tsx server.ts",
-    "prerender": "NODE_ENV=production node --import remix/node-tsx prerender.ts",
+    "prerender": "npm run build:static",
+    "build:static": "NODE_ENV=production node --import remix/node-tsx prerender.ts",
     "test": "NODE_ENV=test remix test",
     "typecheck": "tsc --noEmit"
   },

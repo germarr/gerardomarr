@@ -96,7 +96,7 @@ app/ui/            shared components: shell, cards, article body, icons, theme
 app/actions/       one folder per route area, each with its controller and pages
 posts/             your blog posts
 design/            the design canvas this was built from (*.dc.html)
-prerender.ts       walks every route and writes static HTML to dist/
+prerender.ts       renders every route and mirrors /assets/* into dist/
 ```
 
 `design/*.dc.html` is the source of truth for every visual value. If the code
@@ -109,27 +109,46 @@ npm run dev         # dev server with reload
 npm start           # production server
 npm test            # remix test -- see the note in AGENTS.md
 npm run typecheck
-npm run prerender   # write the whole site to dist/ as static HTML
+npm run build:static # write the whole site to dist/: HTML, assets, SWA config
 ```
 
 ## Deploying
 
 Two options, both open:
 
-**As a Node server** (Azure Containers, like La Cancha). `npm start`. Everything
-works, including the theme toggle and mobile menu.
+**As a Node server** (Azure Containers, like La Cancha). `npm start`.
 
-**As static files** (Azure Static Web Apps, like trending). `npm run prerender`
-writes every page to `dist/`. It exits non-zero rather than shipping a partial
-site if anything fails.
+**As static files** (Azure Static Web Apps — this is what's live). `npm run
+build:static` writes the whole site to `dist/`: every page as its own
+`index.html`, every browser module under `dist/assets/`, the `public/` tree, and
+a `staticwebapp.config.json`. It exits non-zero rather than shipping a partial
+site if any page or asset fails.
 
-⚠️ **One catch with the static route.** All CSS is inlined into the HTML, so
-pages look and read correctly. But the two interactive pieces — the theme toggle
-and the mobile menu — load their JavaScript from `/assets/`, which is served at
-runtime by the Remix asset server. On a bare static host those requests 404: the
-buttons render but do nothing, and the console fills with 404s. Everything else
-— all content, navigation, the stack filters, articles — works fine, because
-it's all real links and server-rendered HTML.
+The static build is fully self-contained. Remix 3's asset server doesn't bundle
+— it transforms modules on demand and serves them from `/assets/*` — so
+`prerender.ts` mirrors that output to disk: it seeds a queue from the entry
+module graph plus every `/assets/*` URL the rendered HTML references, then
+drains it, following the imports of each module it saves. The theme toggle and
+mobile menu work on a bare static host.
 
-Making the static build fully self-contained means emitting the built assets
-alongside `dist/`, which isn't wired up yet.
+Two details in there are load-bearing. Asset URLs contain percent-encoded
+segments (`%40remix-run`), and static hosts decode a URL before looking up the
+file, so each path segment is decoded individually before writing — the files
+have to land at `node_modules/@remix-run/…`. And modules keep their source
+extension, so the emitted `staticwebapp.config.json` maps `.ts` and `.tsx` to
+`application/javascript`; with `X-Content-Type-Options: nosniff` also set, the
+browser would otherwise refuse to execute them.
+
+There's no `navigationFallback` in that config on purpose. Every route has a
+real `index.html` on disk, so a fallback would answer unknown URLs with a 200
+instead of a 404.
+
+### CI
+
+`.github/workflows/azure-swa.yml` builds on every push to `main` and deploys to
+Azure Static Web Apps. It pins Node 24 via `actions/setup-node` — `engines`
+requires `>=24.3.0` for Node's native TypeScript stripping, and SWA's Oryx build
+images don't offer Node 24 — then hands the finished `frontend/dist` to
+`Azure/static-web-apps-deploy` with `skip_app_build: true`.
+
+Local builds need Node 24 too; see `.nvmrc`.
