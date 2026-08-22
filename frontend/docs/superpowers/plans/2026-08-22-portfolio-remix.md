@@ -3725,6 +3725,28 @@ and:
 router.map(routes.writing, writingController)
 ```
 
+- [ ] **Step 6b: Make a malformed post fail at boot, not on a visitor**
+
+`allPosts()` is lazily cached: nothing loads posts until the first request that
+needs them. That contradicts the spec's stated intent ("a malformed post fails
+at startup, not on a visitor") and is worse than it looks — a throw inside
+`cache ??= loadPosts(...)` leaves `cache` null, so *every* subsequent request
+re-throws.
+
+Warm it once at startup. In `server.ts`, before `server.listen(...)`:
+
+```ts
+import { allPosts } from './app/data/posts.ts'
+
+// Parse every post now so a malformed file fails here, loudly, instead of on
+// the first visitor who happens to hit the writing section.
+console.log(`Loaded ${allPosts().length} posts`)
+```
+
+Verify: temporarily break a post's front matter (delete its `hook:` line), run
+`npm run dev`, and confirm the server refuses to start with an error naming that
+file. Restore the post afterwards.
+
 - [ ] **Step 7: Run test to verify it passes**
 
 Run: `npm test`
