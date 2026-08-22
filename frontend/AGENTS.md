@@ -13,6 +13,18 @@ npm test
 npm run typecheck
 ```
 
+`npm test` runs `remix test`, not Node's test runner. This matters: under
+`node --test`, `remix/test`'s `describe`/`it` only register tests into an
+in-memory array and nothing ever executes them — a test body containing an
+unconditional `throw` still reports `pass, fail 0`. If you change the test
+script, verify a deliberately failing test actually fails.
+
+`playwright` is a devDependency even though there are no browser tests. It is
+required by `remix test` itself: `@remix-run/test`'s compiled runner has an
+unconditional import of `./playwright.js`, which statically imports
+`playwright`, so the CLI cannot start without it even for server-only tests.
+Do not remove it until upstream drops that import.
+
 ## Building Features
 
 Refer to ./.agents/skills/remix/SKILL.md
