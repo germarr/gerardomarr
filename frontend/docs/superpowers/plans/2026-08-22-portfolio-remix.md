@@ -1173,7 +1173,7 @@ import { themeTokens } from './theme.ts'
 describe('themeTokens', () => {
   it('defines the light palette on the element itself', () => {
     assert.equal(themeTokens['--paper'], 'oklch(0.973 0.006 85)')
-    assert.equal(themeTokens['--accent'], 'oklch(0.575 0.155 42)')
+    assert.equal(themeTokens['--accent'], 'oklch(0.570 0.155 42)')
   })
 
   it('overrides every token in dark mode', () => {
@@ -1209,11 +1209,11 @@ export const themeTokens: Record<string, unknown> = {
   '--paper-2': 'oklch(0.958 0.008 82)',
   '--ink': 'oklch(0.245 0.012 62)',
   '--ink-2': 'oklch(0.455 0.010 68)',
-  '--ink-3': 'oklch(0.615 0.008 72)',
+  '--ink-3': 'oklch(0.536 0.008 72)',
   '--rule': 'oklch(0.885 0.008 80)',
   '--rule-2': 'oklch(0.815 0.010 78)',
-  '--accent': 'oklch(0.575 0.155 42)',
-  '--accent-wash': 'oklch(0.575 0.155 42 / 0.10)',
+  '--accent': 'oklch(0.570 0.155 42)',
+  '--accent-wash': 'oklch(0.570 0.155 42 / 0.10)',
   '--on-accent': 'oklch(0.985 0.004 85)',
   colorScheme: 'light',
 
@@ -1222,7 +1222,7 @@ export const themeTokens: Record<string, unknown> = {
     '--paper-2': 'oklch(0.224 0.009 70)',
     '--ink': 'oklch(0.925 0.006 85)',
     '--ink-2': 'oklch(0.735 0.008 78)',
-    '--ink-3': 'oklch(0.575 0.008 74)',
+    '--ink-3': 'oklch(0.612 0.008 74)',
     '--rule': 'oklch(0.302 0.010 72)',
     '--rule-2': 'oklch(0.382 0.012 72)',
     '--accent': 'oklch(0.740 0.145 55)',
