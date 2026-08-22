@@ -359,6 +359,16 @@ git add app/utils/front-matter.ts app/utils/front-matter.test.ts
 git commit -m "Add front-matter parser for blog posts"
 ```
 
+> **Hardened after review.** The reference implementation above silently
+> corrupted content on several plausible author typos. As shipped, the parser
+> additionally throws on: an unterminated quote, a `tags:` value that is not a
+> bracketed list, a duplicate key, and a `minutes` value with trailing
+> non-numeric text; and it splits tag lists quote-aware so `["a, b", c]`
+> survives. `tags` and `image` remain optional (missing → `[]` / `''`); only
+> `title`/`hook`/`date`/`minutes` are required. See commits `bf98081`,
+> `7a9e034`, `9b6b2ec` for the shipped version, which is the authority over the
+> snippet above.
+
 ---
 
 ## Task 3: Thumbnail geometry
