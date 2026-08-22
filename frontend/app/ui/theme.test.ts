@@ -5,7 +5,7 @@ import { themeTokens } from './theme.ts'
 
 describe('themeTokens', () => {
   it('defines the light palette on the element itself', () => {
-    assert.equal(themeTokens['--paper'], 'oklch(0.973 0.006 85)')
+    assert.equal(themeTokens['--paper'], 'oklch(0.982 0.004 91)')
     assert.equal(themeTokens['--accent'], 'oklch(0.570 0.155 42)')
   })
 
