@@ -3768,7 +3768,23 @@ git commit -m "Build the writing index and article pages"
 - Modify: `app/actions/public/mobile-menu.tsx`
 - Test: `app/actions/public/theme-toggle.test.tsx`
 
-Replaces the stubs from Task 8 with real hydrated components. Both take only serializable props.
+Replaces the stubs from Task 8 with real hydrated components.
+
+**Convention this codebase already uses** (from the scaffold's now-deleted
+`prompt-button.tsx`): a client entry's props interface must
+`extends SerializableProps`, imported from `remix/ui` alongside `clientEntry`.
+That enforces serializability at the type level rather than by convention —
+`clientEntry` props are JSON-serialized into the page, so a function or class
+instance would fail at runtime. `MobileMenu`'s `{ section }` prop needs it;
+`ThemeToggle` takes no props.
+
+```ts
+import { clientEntry, css, on, type Handle, type SerializableProps } from 'remix/ui'
+
+interface MobileMenuProps extends SerializableProps {
+  section: Section
+}
+```
 
 - [ ] **Step 1: Write the failing test**
 
