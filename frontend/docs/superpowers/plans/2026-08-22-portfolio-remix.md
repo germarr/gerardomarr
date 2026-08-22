@@ -22,7 +22,9 @@ These were confirmed empirically against the installed packages before this plan
 
 **Nested maps must be registered explicitly** in `app/router.ts`: `router.map(routes.projects, projectsController)`.
 
-**Tests.** The scaffold's `npm test` (`node --test`) works with `import { describe, it } from 'remix/test'` and `import * as assert from 'remix/assert'`. The singleton `router` export from `app/router.ts` responds to `router.fetch(new Request(...))`. `console.log` inside a test is swallowed by the TAP reporter — assert instead of logging.
+**Tests.** Use `import { describe, it } from 'remix/test'` and `import * as assert from 'remix/assert'`, run via `npm test`. The singleton `router` export from `app/router.ts` responds to `router.fetch(new Request(...))`. `console.log` inside a test is swallowed by the reporter — assert instead of logging.
+
+> **Corrected during Task 1.** The scaffold shipped `"test": "node --import remix/node-tsx --test"`, which **silently never executes `remix/test` bodies** — a test containing an unconditional `throw` still reported `pass, fail 0`. Every "expected: FAIL" step in this plan would have been meaningless. Task 1 changed the script to `remix test` (the convention the project's own remix skill documents) and added `playwright` as a devDependency, working around a stray runtime import of `./playwright.js` in `@remix-run/test`'s compiled runner. **Do not revert either change.** When a step says "run to verify it fails", confirm you actually see a non-zero fail count — a green run at that point means the harness is broken again, not that the code is done.
 
 **marked tokens.** `marked.lexer(md)` returns block tokens. Types seen: `paragraph`, `heading` (`depth`, `text`, `tokens`), `list` (`ordered`, `items[]`), `blockquote` (`tokens`), `code` (`lang`, `text`), `hr`, `space`. `space` tokens must be skipped. Inline tokens on `paragraph.tokens`: `text`, `link` (`href`, `text`), `strong`, `em`, `codespan`, `image` (`href`, `text`). **List items nest one level deeper:** `list.items[i].tokens` is `[{ type: 'text', tokens: [...inline] }]`.
 
