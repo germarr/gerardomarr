@@ -1,9 +1,12 @@
+import * as path from 'node:path'
+
 import * as assert from 'remix/assert'
 import { describe, it } from 'remix/test'
 import { marked } from 'marked'
 import { createElement } from 'remix/ui'
 import { renderToString } from 'remix/ui/server'
 
+import { loadPosts } from '../data/posts.ts'
 import { ArticleBody, inlineTokensOf } from './article-body.tsx'
 
 describe('inlineTokensOf', () => {
@@ -86,5 +89,88 @@ describe('ArticleBody tables', () => {
     assert.match(html, /overflow-x:\s*auto/)
     // the overflow wrapper must be a div that contains the table, not applied to <table> itself
     assert.match(html, /<div[^>]*class="[^"]*"[^>]*><table/)
+  })
+})
+
+const COLLISION_FIXTURES = path.resolve(
+  import.meta.dirname,
+  '../../test/fixtures/posts-heading-collisions',
+)
+
+describe('ArticleBody heading id contract', () => {
+  it('renders each heading with the id readPost assigned, including the de-dup suffix, not a recomputed one', async () => {
+    let post = loadPosts(COLLISION_FIXTURES)[0]!
+    let html = await renderToString(createElement(ArticleBody, { tokens: post.tokens }))
+    let emittedIds = [...html.matchAll(/<h[23] id="([^"]+)"/g)].map((match) => match[1])
+    assert.deepEqual(emittedIds, post.contents.map((entry) => entry.id))
+  })
+})
+
+describe('ArticleBody heading depth mapping', () => {
+  it('renders depth 1 and 2 as h2, depth 3 and deeper as h3', async () => {
+    let html = await renderTokens('# One\n\n## Two\n\n### Three\n\n#### Four\n')
+    assert.match(html, /<h2[^>]*>One<\/h2>/)
+    assert.match(html, /<h2[^>]*>Two<\/h2>/)
+    assert.match(html, /<h3[^>]*>Three<\/h3>/)
+    assert.match(html, /<h3[^>]*>Four<\/h3>/)
+  })
+})
+
+describe('ArticleBody block renderers', () => {
+  it('renders paragraph, list, blockquote, code, and hr as their expected tags', async () => {
+    let md = [
+      'A paragraph.',
+      '',
+      '- one',
+      '- two',
+      '- three',
+      '',
+      '1. first',
+      '2. second',
+      '',
+      '> quoted paragraph',
+      '',
+      '```',
+      'code line',
+      '```',
+      '',
+      '---',
+      '',
+    ].join('\n')
+    let html = await renderTokens(md)
+
+    assert.match(html, /<p[^>]*>A paragraph\.<\/p>/)
+
+    let ulMatch = /<ul[^>]*>([\s\S]*?)<\/ul>/.exec(html)
+    assert.ok(ulMatch)
+    assert.equal((ulMatch![1]!.match(/<li>/g) ?? []).length, 3)
+
+    assert.match(html, /<ol[^>]*>[\s\S]*<\/ol>/)
+
+    let blockquoteMatch = /<blockquote[^>]*>([\s\S]*?)<\/blockquote>/.exec(html)
+    assert.ok(blockquoteMatch)
+    assert.match(blockquoteMatch![1]!, /<p[^>]*>quoted paragraph<\/p>/)
+
+    assert.match(html, /<pre[^>]*><code>code line<\/code><\/pre>/)
+
+    // the hr rule element: an empty, styled div with no text content
+    assert.match(html, /<div class="[^"]+"><\/div>/)
+  })
+})
+
+describe('ArticleBody unknown block types', () => {
+  it('warns once, naming the unhandled type, instead of failing silently', async () => {
+    let originalWarn = console.warn
+    let calls: unknown[][] = []
+    console.warn = (...args: unknown[]) => {
+      calls.push(args)
+    }
+    try {
+      await renderTokens('<div>raw html block</div>\n')
+      assert.equal(calls.length, 1)
+      assert.match(String(calls[0]![0]), /no renderer for markdown block type "html"/)
+    } finally {
+      console.warn = originalWarn
+    }
   })
 })

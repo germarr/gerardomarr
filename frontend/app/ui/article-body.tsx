@@ -1,16 +1,21 @@
 import { css, type Handle } from 'remix/ui'
-import type { Token } from 'marked'
+import type { Token, Tokens } from 'marked'
 
+import type { HeadingToken } from '../data/posts.ts'
 import { FONT_MONO, FONT_SANS } from './theme.ts'
 
 /**
  * Inline tokens for a block. List items wrap their inline content in an extra
- * `text` token, so descend one level when that is what we are given.
+ * `text` token, so descend one level when that is what we are given. The
+ * input shape is intentionally irregular across callers (a heading token, a
+ * paragraph token, a list item, a table cell, ...), so this deliberately
+ * takes `any` rather than forcing every call site into an unsafe cast; the
+ * return type is the real `Token[]` that callers actually want.
  */
-export function inlineTokensOf(token: any): any[] {
-  let tokens: any[] = token?.tokens ?? []
-  if (tokens.length === 1 && tokens[0]?.type === 'text' && Array.isArray(tokens[0]?.tokens)) {
-    return tokens[0].tokens
+export function inlineTokensOf(token: any): Token[] {
+  let tokens: Token[] = token?.tokens ?? []
+  if (tokens.length === 1 && tokens[0]?.type === 'text' && Array.isArray((tokens[0] as any)?.tokens)) {
+    return (tokens[0] as any).tokens
   }
   return tokens
 }
@@ -25,19 +30,25 @@ export function ArticleBody(handle: Handle<{ tokens: Token[] }>) {
   )
 }
 
-function BlockToken(handle: Handle<{ token: any }>) {
+function BlockToken(handle: Handle<{ token: Token }>) {
   return () => {
     let token = handle.props.token
 
     switch (token.type) {
+      // marked's own `Tokens.Heading` has no `id` field -- `HeadingToken`
+      // (from app/data/posts.ts) is the real, de-duplicated-id-bearing type
+      // that `readPost` produces, so read through that rather than `any`.
+      // This is the one cast in this file that exists specifically so a
+      // typo'd or recomputed id fails to compile instead of failing silently.
       case 'heading': {
-        let inline = inlineTokensOf(token)
-        return token.depth <= 2 ? (
-          <h2 id={token.id} mix={h2Style}>
+        let heading = token as HeadingToken
+        let inline = inlineTokensOf(heading)
+        return heading.depth <= 2 ? (
+          <h2 id={heading.id} mix={h2Style}>
             <InlineTokens tokens={inline} />
           </h2>
         ) : (
-          <h3 id={token.id} mix={h3Style}>
+          <h3 id={heading.id} mix={h3Style}>
             <InlineTokens tokens={inline} />
           </h3>
         )
@@ -49,43 +60,49 @@ function BlockToken(handle: Handle<{ token: any }>) {
           </p>
         )
       case 'list': {
-        let items = (token.items ?? []).map((item: any, index: number) => (
+        let list = token as Tokens.List
+        let items = list.items.map((item: Tokens.ListItem, index: number) => (
           <li key={index}>
             <InlineTokens tokens={inlineTokensOf(item)} />
           </li>
         ))
-        return token.ordered ? (
+        return list.ordered ? (
           <ol mix={olStyle}>{items}</ol>
         ) : (
           <ul mix={ulStyle}>{items}</ul>
         )
       }
-      case 'blockquote':
+      case 'blockquote': {
+        let blockquote = token as Tokens.Blockquote
         return (
           <blockquote mix={blockquoteStyle}>
-            {(token.tokens ?? []).map((child: any, index: number) => (
+            {blockquote.tokens.map((child: Token, index: number) => (
               <BlockToken key={index} token={child} />
             ))}
           </blockquote>
         )
-      case 'code':
+      }
+      case 'code': {
+        let code = token as Tokens.Code
         return (
           <pre mix={preStyle}>
-            <code>{token.text}</code>
+            <code>{code.text}</code>
           </pre>
         )
+      }
       case 'hr':
         return <div mix={hrStyle} />
       case 'table': {
-        let align: (string | null)[] = token.align ?? []
-        let headerCells = (token.header ?? []).map((cell: any, columnIndex: number) => (
+        let table = token as Tokens.Table
+        let align = table.align
+        let headerCells = table.header.map((cell: Tokens.TableCell, columnIndex: number) => (
           <th key={columnIndex} mix={css({ ...thBaseProps, textAlign: align[columnIndex] ?? 'left' })}>
             <InlineTokens tokens={inlineTokensOf(cell)} />
           </th>
         ))
-        let bodyRows = (token.rows ?? []).map((row: any[], rowIndex: number) => (
+        let bodyRows = table.rows.map((row: Tokens.TableCell[], rowIndex: number) => (
           <tr key={rowIndex}>
-            {row.map((cell: any, columnIndex: number) => (
+            {row.map((cell: Tokens.TableCell, columnIndex: number) => (
               <td key={columnIndex} mix={css({ ...tdBaseProps, textAlign: align[columnIndex] ?? 'left' })}>
                 <InlineTokens tokens={inlineTokensOf(cell)} />
               </td>
@@ -110,7 +127,7 @@ function BlockToken(handle: Handle<{ token: any }>) {
   }
 }
 
-function InlineTokens(handle: Handle<{ tokens: any[] }>) {
+function InlineTokens(handle: Handle<{ tokens: Token[] }>) {
   return () => (
     <>
       {handle.props.tokens.map((token, index) => (
@@ -120,7 +137,7 @@ function InlineTokens(handle: Handle<{ tokens: any[] }>) {
   )
 }
 
-function InlineToken(handle: Handle<{ token: any }>) {
+function InlineToken(handle: Handle<{ token: Token }>) {
   return () => {
     let token = handle.props.token
 
@@ -137,20 +154,32 @@ function InlineToken(handle: Handle<{ token: any }>) {
             <InlineTokens tokens={inlineTokensOf(token)} />
           </em>
         )
-      case 'codespan':
-        return <code mix={codespanStyle}>{token.text}</code>
-      case 'link':
+      case 'codespan': {
+        let codespan = token as Tokens.Codespan
+        return <code mix={codespanStyle}>{codespan.text}</code>
+      }
+      case 'link': {
+        let link = token as Tokens.Link
         return (
-          <a href={token.href} title={token.title ?? undefined} mix={linkStyle}>
-            <InlineTokens tokens={inlineTokensOf(token)} />
+          <a href={link.href} title={link.title ?? undefined} mix={linkStyle}>
+            <InlineTokens tokens={inlineTokensOf(link)} />
           </a>
         )
-      case 'image':
-        return <img src={token.href} alt={token.text} title={token.title ?? undefined} mix={imageStyle} />
+      }
+      case 'image': {
+        let image = token as Tokens.Image
+        return <img src={image.href} alt={image.text} title={image.title ?? undefined} mix={imageStyle} />
+      }
       case 'br':
         return <br />
       default:
-        return <>{token.text}</>
+        // The leftover members of marked's `Token` union here (`Tokens.Text`,
+        // `Tokens.Escape`, `Tokens.Del`, `Tokens.Tag`, `Tokens.Generic`, ...)
+        // don't share a single named interface -- some lack `.text` entirely
+        // (e.g. `Tokens.Checkbox`) -- so there is no single cast that would be
+        // both honest and safe here. Reading `.text` off an untyped view is
+        // the deliberate compromise for this one fallback branch.
+        return <>{(token as any).text}</>
     }
   }
 }
