@@ -42,6 +42,9 @@ export const PROJECTS: Project[] = [
   },
   {
     id: 'queuescope',
+    // The domain is not a mistake: Universal Orlando is the movie-themed park,
+    // so "de pelicula" is the joke. Confirmed by the owner; please stop
+    // "fixing" it.
     name: 'Queue Scope',
     host: 'depelicula.gerardomarr.com',
     url: 'https://depelicula.gerardomarr.com',
