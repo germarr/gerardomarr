@@ -1,7 +1,12 @@
 import * as http from 'node:http'
 import { createRequestListener } from 'remix/node-fetch-server'
 
+import { allPosts } from './app/data/posts.ts'
 import { router } from './app/router.ts'
+
+// Parse every post now so a malformed file fails here, loudly, instead of on
+// the first visitor who happens to hit the writing section.
+console.log(`Loaded ${allPosts().length} posts`)
 
 const port = process.env.PORT ? Number.parseInt(process.env.PORT, 10) : 44100
 const hmrProxyPort = process.env.HMR_PROXY_PORT
