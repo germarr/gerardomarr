@@ -19,6 +19,16 @@ describe('linePath', () => {
   it('throws when given fewer than two values', () => {
     assert.throws(() => linePath([1], 28), /at least 2/)
   })
+
+  it('places the end marker exactly on the line it draws', () => {
+    for (let series of [[12, 18, 96], [10, 90, 50], [5, 5, 5, 9], [1, 2, 3, 4, 5]]) {
+      let commands = linePath(series, 28).split(/(?=[ML])/)
+      let final = commands[commands.length - 1]!.trim().slice(1).split(' ')
+      let end = lastPoint(series, 28)
+      assert.equal(final[0], end.x)
+      assert.equal(final[1], end.y)
+    }
+  })
 })
 
 describe('areaPath', () => {

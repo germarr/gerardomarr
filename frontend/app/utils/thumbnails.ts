@@ -5,16 +5,27 @@
 const W = 320
 const H = 200
 
+/** Shared min/span for a series, so every consumer normalizes identically. */
+function scale(values: number[]): { min: number; span: number } {
+  let max = Math.max(...values)
+  let min = Math.min(...values)
+  return { min, span: max - min || 1 }
+}
+
+/** The one y-projection formula. `linePath` and `lastPoint` both call this
+ *  so the end marker can never drift off the line it marks. */
+function projectY(value: number, min: number, span: number, pad: number): number {
+  return H - pad - ((value - min) / span) * (H - pad * 2)
+}
+
 export function linePath(values: number[], pad: number): string {
   if (values.length < 2) throw new Error(`linePath needs at least 2 values, got ${values.length}`)
   let n = values.length
-  let max = Math.max(...values)
-  let min = Math.min(...values)
-  let span = max - min || 1
+  let { min, span } = scale(values)
   let d = ''
   for (let i = 0; i < n; i++) {
     let x = pad + (i / (n - 1)) * (W - pad * 2)
-    let y = H - pad - ((values[i]! - min) / span) * (H - pad * 2)
+    let y = projectY(values[i]!, min, span, pad)
     d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' '
   }
   return d.trim()
@@ -45,6 +56,8 @@ export function barsPath(values: number[], pad: number, gap: number): string {
   return d.trim()
 }
 
+/** Intentionally unguarded: degenerate dimensions make the loop a no-op and
+ *  return '', never NaN — unlike the series-driven paths above. */
 export function cellsPath(
   columns: number,
   rows: number,
@@ -71,12 +84,10 @@ export function cellsPath(
 /** End marker for the line motif — computed, never hard-coded. */
 export function lastPoint(values: number[], pad: number): { x: string; y: string } {
   if (values.length < 1) throw new Error(`lastPoint needs at least 1 value, got ${values.length}`)
-  let max = Math.max(...values)
-  let min = Math.min(...values)
-  let span = max - min || 1
+  let { min, span } = scale(values)
   let last = values[values.length - 1]!
   return {
     x: (W - pad).toFixed(1),
-    y: (H - pad - ((last - min) / span) * (H - pad * 2)).toFixed(1),
+    y: projectY(last, min, span, pad).toFixed(1),
   }
 }
