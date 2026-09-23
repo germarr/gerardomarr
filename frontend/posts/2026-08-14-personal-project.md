@@ -3,7 +3,7 @@ title:   "Tuve que sentarme y pensar todos mis projectos"
 hook:    "15 projectos a 5, todo sea por un portafolio bonito"
 date:    2026-08-14
 minutes: 7
-tags:    [sample]
+tags:    [portfolio, side-projects]
 image:   ""
 ---
 
