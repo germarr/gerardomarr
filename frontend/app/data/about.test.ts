@@ -37,10 +37,12 @@ describe('ABOUT copy fidelity', () => {
     assert.equal(ABOUT.kicker, "The model isn't the work. Getting it used is the work.")
   })
 
-  it('keeps the social links as unfilled placeholders until real ones are supplied', () => {
-    // Guards against anything inventing plausible-looking handles.
-    assert.equal(ABOUT.social.github, '[YOUR GITHUB URL]')
-    assert.equal(ABOUT.social.linkedin, '[YOUR LINKEDIN URL]')
-    assert.equal(ABOUT.social.instagram, '[YOUR INSTAGRAM URL]')
+  it('keeps the owner-supplied social links exactly as given', () => {
+    // These three were supplied by the owner. Same intent as when they were
+    // placeholders: nothing gets to quietly swap in a plausible-looking
+    // handle, so they are pinned literally.
+    assert.equal(ABOUT.social.github, 'https://github.com/germarr')
+    assert.equal(ABOUT.social.linkedin, 'https://www.linkedin.com/in/martinezarroyogerardo/')
+    assert.equal(ABOUT.social.instagram, 'https://www.instagram.com/gmarr.ai/')
   })
 })

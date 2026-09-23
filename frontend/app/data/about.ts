@@ -17,7 +17,8 @@ export interface About {
 
 // ─────────────────────────────────────────────────────────────────────────
 // Edit this to change everything the home page says about you.
-// The three social URLs are placeholders until real ones are supplied.
+// The display text under each social icon lives in `SOCIALS` in
+// `app/actions/home-page.tsx` -- change a handle here and change it there.
 // ─────────────────────────────────────────────────────────────────────────
 export const ABOUT: About = {
   name: 'Gerardo Martinez',
@@ -32,8 +33,8 @@ export const ABOUT: About = {
   ],
   kicker: "The model isn't the work. Getting it used is the work.",
   social: {
-    github: '[YOUR GITHUB URL]',
-    linkedin: '[YOUR LINKEDIN URL]',
-    instagram: '[YOUR INSTAGRAM URL]',
+    github: 'https://github.com/germarr',
+    linkedin: 'https://www.linkedin.com/in/martinezarroyogerardo/',
+    instagram: 'https://www.instagram.com/gmarr.ai/',
   },
 }

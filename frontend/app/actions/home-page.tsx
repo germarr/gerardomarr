@@ -13,22 +13,22 @@ import { Shell } from '../ui/shell.tsx'
 
 /**
  * Page chrome, not ABOUT copy: the GitHub/LinkedIn/Instagram icon plus the
- * `<platform>.com/[handle]`-style placeholder shown on the ELSEWHERE cards
- * in design/Main.dc.html. `href` is the only piece that comes from ABOUT --
- * the real, owner-supplied `[YOUR ... URL]` placeholder.
+ * `<platform>.com/<handle>` label shown on the ELSEWHERE cards in
+ * design/Main.dc.html. `href` is the only piece that comes from ABOUT, so
+ * `handle` here has to be kept in step with the URL in `app/data/about.ts`.
  */
 const SOCIALS = [
-  { name: 'GitHub', href: ABOUT.social.github, handle: 'github.com/[handle]', Icon: GitHub },
+  { name: 'GitHub', href: ABOUT.social.github, handle: 'github.com/germarr', Icon: GitHub },
   {
     name: 'LinkedIn',
     href: ABOUT.social.linkedin,
-    handle: 'linkedin.com/in/[handle]',
+    handle: 'linkedin.com/in/martinezarroyogerardo',
     Icon: LinkedIn,
   },
   {
     name: 'Instagram',
     href: ABOUT.social.instagram,
-    handle: 'instagram.com/[handle]',
+    handle: 'instagram.com/gmarr.ai',
     Icon: Instagram,
   },
 ] as const
