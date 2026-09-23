@@ -1,6 +1,8 @@
 import * as assert from 'remix/assert'
 import { describe, it } from 'remix/test'
 
+import { allPosts } from '../data/posts.ts'
+import { featuredProjects, PROJECTS } from '../data/projects.ts'
 import { router } from '../router.ts'
 import { routes } from '../routes.ts'
 
@@ -21,22 +23,21 @@ describe('home', () => {
     assert.match(html, /Marketing Mix Models/)
   })
 
-  it('shows the three featured projects and not the fourth', async () => {
+  it('shows every featured project and no unfeatured one', async () => {
     let { html } = await fetchPage(routes.home.href())
-    assert.match(html, /La Cancha/)
-    assert.match(html, /Queue Scope/)
-    assert.match(html, /Trending/)
-    assert.equal(html.includes('Movies MX'), false)
+    for (let project of PROJECTS) {
+      assert.equal(html.includes(project.name), project.featured)
+    }
   })
 
-  it('renders exactly three project cards', async () => {
+  it('renders exactly one card per featured project', async () => {
     let { html } = await fetchPage(routes.home.href())
     // Every ProjectCard link opens in a new tab (target="_blank") and
-    // nothing else on the home page does -- distinguishes "the right three
-    // projects appear" (checked above by name) from "and there are exactly
-    // three cards, not four with one duplicated".
+    // nothing else on the home page does -- distinguishes "the right
+    // projects appear" (checked above by name) from "and each appears
+    // exactly once, with none duplicated".
     let cardCount = (html.match(/target="_blank"/g) ?? []).length
-    assert.equal(cardCount, 3)
+    assert.equal(cardCount, featuredProjects().length)
   })
 
   it('links to the projects and writing sections', async () => {
@@ -45,9 +46,13 @@ describe('home', () => {
     assert.match(html, /href="\/writing"/)
   })
 
-  it('links to both recent posts', async () => {
+  it('links to the two most recent posts', async () => {
+    // WritingSection renders `allPosts().slice(0, 2)`; deriving the expected
+    // slugs the same way keeps this test tied to the selection rule rather
+    // than to whichever posts happen to be on disk.
+    let recent = allPosts().slice(0, 2)
     let { html } = await fetchPage(routes.home.href())
-    assert.match(html, /href="\/writing\/2026-08-14-sample-post"/)
-    assert.match(html, /href="\/writing\/2026-06-02-second-sample"/)
+    assert.equal(recent.length, 2)
+    for (let post of recent) assert.match(html, new RegExp(`href="/writing/${post.slug}"`))
   })
 })

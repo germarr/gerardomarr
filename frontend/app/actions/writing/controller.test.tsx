@@ -32,11 +32,16 @@ describe('article', () => {
     assert.match(html, new RegExp(first.minutes + ' MIN'))
   })
 
-  it('renders headings with anchor ids for the contents list', async () => {
-    let withHeadings = allPosts().find((post) => post.contents.length > 0)
-    assert.notEqual(withHeadings, undefined)
-    let { html } = await fetchPage(routes.writing.post.href({ slug: withHeadings!.slug }))
-    assert.match(html, new RegExp(`id="${withHeadings!.contents[0]!.id}"`))
+  // Route-level check that every entry in a post's contents is rendered as a
+  // matching anchor id. Quiet while no post has headings; the contract itself
+  // is locked against a fixture in `app/ui/article-body.test.ts`, so this does
+  // not depend on any particular post being written a particular way.
+  it('renders an anchor id for every contents entry', async () => {
+    for (let post of allPosts()) {
+      if (post.contents.length === 0) continue
+      let { html } = await fetchPage(routes.writing.post.href({ slug: post.slug }))
+      for (let entry of post.contents) assert.match(html, new RegExp(`id="${entry.id}"`))
+    }
   })
 
   it('404s on an unknown slug', async () => {

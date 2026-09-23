@@ -72,12 +72,25 @@ export const PROJECTS: Project[] = [
   {
     id: 'movies',
     name: 'Movies MX',
-    host: 'movies.gerardomarr.com',
-    url: 'https://movies.gerardomarr.com',
+    host: 'moviedashboard.gerardomarr.com',
+    url: 'https://moviedashboard.gerardomarr.com/',
     kind: 'grid',
     kindLabel: 'SCREENINGS',
     blurb:
       'A dashboard tracking which movies are being screened in Mexico.',
+    tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
+    series: [1, 2, 5, 8, 9, 11, 14, 17, 18, 19, 22, 25, 26, 29, 33, 34, 37],
+    featured: false,
+  },
+  {
+    id: 'enarm',
+    name: 'Resultados ENARM',
+    host: 'enarm.gerardomarr.com',
+    url: 'https://enarm.gerardomarr.com/',
+    kind: 'grid',
+    kindLabel: 'RESULTS',
+    blurb:
+      'A dashboard tracking the results of the ENARM exam in Mexico.',
     tech: ['Python', 'FastAPI', 'SQLite', 'pandas', 'Chart.js'],
     series: [1, 2, 5, 8, 9, 11, 14, 17, 18, 19, 22, 25, 26, 29, 33, 34, 37],
     featured: false,
